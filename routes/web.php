@@ -1,6 +1,8 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
+use Yajra\DataTables\Facades\DataTables;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +18,13 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('layouts.admin.app');
 });
+
+Route::get('/dashboard',function(){
+    return view('pages.loket.index',['title'=>'Loket']);
+});
+
+Route::get('/data',function(){
+    $user = User::all();
+
+    return DataTables::of($user)->make();
+})->name('data');
