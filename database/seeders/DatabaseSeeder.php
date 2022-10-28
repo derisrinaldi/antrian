@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Unit;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -14,5 +15,11 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // \App\Models\User::factory(10)->create();
+        Unit::create([
+            'unit_name'=>strtoupper("admisi")
+        ]);
+        Unit::create([
+            'unit_name'=>strtoupper("farmasi")
+        ]);
     }
 }

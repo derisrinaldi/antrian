@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Controllers\AntrianController;
+use App\Http\Controllers\LoketController;
 use App\Models\User;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -28,3 +31,15 @@ Route::get('/data',function(){
 
     return DataTables::of($user)->make();
 })->name('data');
+
+Route::get('/antrian',function(){
+    return view('pages.antrianadmisi.index');
+});
+
+Route::get("/antrian/{unit}",[AntrianController::class,"getAntrian"]);
+Route::get('/tiket',function(){
+    return view('pages.antrianadmisi.tiket');
+});
+
+Route::resource('/loket',LoketController::class);
+Route::get('/data/loket',[LoketController::class,"data"])->name('loket.data');

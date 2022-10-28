@@ -1,19 +1,16 @@
 @extends('layouts.admin.app')
 
 @section('container')
-   
-       
-   
     <div class="card">
         <div class="card-body">
             <div class="row ">
                 <div class="col d-flex justify-content-end">
 
-                    <button class="btn btn-sm btn-primary me-1">
+                    <button class="btn btn-sm btn-primary me-1" onclick="addLoket('{{ $unit[0]->id }}')">
                         <i class="bi bi-plus"></i>
                         Admisi
                     </button>
-                    <button class="btn btn-sm btn-info text-white ">
+                    <button class="btn btn-sm btn-info text-white " onclick="addLoket('{{ $unit[1]->id }}')">
                         <i class="bi bi-plus"></i>
                         Farmasi
                     </button>
@@ -24,20 +21,9 @@
                 <table class="table" id="table">
                     <thead>
                         <tr>
-                            <th> id</th>
-                            <th> name</th>
-                            <th> email</th>
-                            <th> created_at</th>
-                            <th> updated_at</th>
+                            <th> Loket</th>
+                            <th> Unit</th>
                         </tr>
-                        <tr>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                        </tr>
-
                     </thead>
 
                 </table>
@@ -47,63 +33,77 @@
     </div>
     @push('script')
         <script>
-            $(() => {
-                $('#table').DataTable({
+            var table = $('#table').DataTable({
                     processing: true,
                     serverSide: true,
                     ordering: false,
-                    ajax: '{{ route('data') }}',
+                    ajax: '{{ route('loket.data') }}',
                     columns: [{
-                            data: 'id',
-                            name: 'id'
+                            data: 'loket_name',
+                            name: 'loket_name'
                         },
                         {
-                            data: 'name',
-                            name: 'name'
+                            data: 'unit.unit_name',
+                            name: 'unit.unit_name'
                         },
-                        {
-                            data: 'email',
-                            name: 'email'
-                        },
-                        {
-                            data: 'created_at',
-                            name: 'created_at'
-                        },
-                        {
-                            data: 'updated_at',
-                            name: 'updated_at'
-                        }
                     ],
-                    initComplete: function() {
-                        this.api().column(1).each(function() {
-                            var column = this;
-                            var input = document.createElement('input');
-                            $("<input class=form-control>").appendTo($(column.header()))
-                                .on('keyup change clear', function() {
-                                    var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                    // initComplete: function() {
+                    //     this.api().column(1).each(function() {
+                    //         var column = this;
+                    //         var input = document.createElement('input');
+                    //         $("<input class=form-control>").appendTo($(column.header()))
+                    //             .on('keyup change clear', function() {
+                    //                 var val = $.fn.dataTable.util.escapeRegex($(this).val());
 
-                                    column.search(val ? val : '', true, false).draw();
-                                });
-                        });
-                        this.api().column(2).each(function() {
-                            var column = this;
-                            var input = document.createElement('input');
-                            $("<select class=form-select><option value=''>Semua</option><option value=''>Semua</option></select>").appendTo(
-                                    $(column.header()))
-                                .on('change', function() {
-                                    var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                    //                 column.search(val ? val : '', true, false).draw();
+                    //             });
+                    //     });
+                    //     this.api().column(2).each(function() {
+                    //         var column = this;
+                    //         var input = document.createElement('input');
+                    //         $("<select class=form-select><option value=''>Semua</option><option value=''>Semua</option></select>").appendTo(
+                    //                 $(column.header()))
+                    //             .on('change', function() {
+                    //                 var val = $.fn.dataTable.util.escapeRegex($(this).val());
 
-                                    column.search(val ? '^' + val + '$' : '', true, false).draw();
-                                });
-                        });
+                    //                 column.search(val ? '^' + val + '$' : '', true, false).draw();
+                    //             });
+                    //     });
 
-                    }
+                    // }
                 });
+            function addLoket(id) {
+                Swal.fire({
+                    title: 'Yakin Ingin Menambah Loket?',
+                    showCancelButton: true,
+                    confirmButtonText: 'OK',
+                }).then((result) => {
+                    /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) {
+                        var data = "unit_id="+id+"&_token={{ csrf_token(); }}";
+                        $.ajax({
+                            type:'post',
+                            data:data,
+                            dataType:'json',
+                            url:"{{ route('loket.store') }}",
+                            success:function(res){
+                                Swal.fire(res.loket,'', 'success')
+                                table.ajax.reload();
+
+                            }
+
+                        })
+                    } 
+                })
+            }
+
+            $(() => {
+                table;
 
             })
         </script>
     @endpush
     <style>
-       
+
     </style>
 @endsection
