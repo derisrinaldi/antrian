@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AntrianController;
 use App\Http\Controllers\LoketController;
+use App\Models\Loket;
 use App\Models\User;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
@@ -43,3 +44,12 @@ Route::get('/tiket',function(){
 
 Route::resource('/loket',LoketController::class);
 Route::get('/data/loket',[LoketController::class,"data"])->name('loket.data');
+
+Route::get('/display',function(){
+    return view('layouts.display.app');
+});
+
+Route::get('/t/{no}/{loket}',function($no,Loket $loket){
+    event(new \App\Events\SendMessage($loket->loket_name,$no));
+    dd("event send");
+});

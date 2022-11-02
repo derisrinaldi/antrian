@@ -25,6 +25,8 @@
         "datatables.net": "^1.12.1",
         "datatables.net-dt": "^1.12.1",
         "jquery": "^3.6.1",
+        "laravel-echo": "^1.14.1",
+        "socket.io-client": "^4.5.3",
         "sweetalert2": "^11.4.37"
     }
 }
