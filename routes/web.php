@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AntrianController;
+use App\Http\Controllers\CallerController;
 use App\Http\Controllers\LoketController;
 use App\Models\Loket;
 use App\Models\User;
@@ -49,7 +50,8 @@ Route::get('/display',function(){
     return view('layouts.display.app');
 });
 
-Route::get('/t/{no}/{loket}',function($no,Loket $loket){
-    event(new \App\Events\SendMessage($loket->loket_name,$no));
-    dd("event send");
-});
+Route::get('/caller/{loket_id}',[CallerController::class,'index']);
+
+Route::get("/nextQueue",[AntrianController::class,"nextQueue"])->name('antrian.next');
+Route::get("/repeatQueue",[AntrianController::class,"repeatQueue"])->name('antrian.repeat');
+Route::get("/updateStatus",[AntrianController::class,"updateStatus"])->name('antrian.status.update');
