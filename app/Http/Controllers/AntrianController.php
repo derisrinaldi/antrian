@@ -114,7 +114,7 @@ class AntrianController extends Controller
 
         return response()->json([
             "antrian" => $antrian[0]->antrian,
-            "date" => date('d/m/Y H:m:s', strtotime($antrian[0]->created_at)),
+            "date" => date('d/m/Y H:i:s', strtotime($antrian[0]->created_at)),
             "unit" => $antrian[0]->unit->unit_name,
             "rest" => count($rest)
         ]);
