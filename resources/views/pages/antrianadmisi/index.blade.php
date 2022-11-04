@@ -59,11 +59,10 @@
                 <div class="text-center pull-right photo">
                     <img src="{{ asset('images/avatar.png') }}"
                         class="user-avatar img-circle img-responsive float-end">
-
                 </div>
             </div>
             <div class="form-content">
-                <h1>PESERTA BARU / ADMISI</h1>
+                <h1>PENDAFTARAN / {{ $unit->unit_name }}</h1>
                 <h5 style="margin-top:10px;margin-bottom:10px;font-size:14px;">Silahkan ambil nomor antrian dibawah</h5>
                 <button onclick="ant()"
                     class="block card bg-warning my-btn text-decoration-none text-center text-white">
@@ -78,38 +77,6 @@
         </div>
     </div>
 
-    {{-- <main class="form-signin">
-        <div class="row mt-5">
-            <div class="col-lg-5 position-relative" style="vertical-align: middle">
-                <img class="mb-4 position-absolute end-0 img-circle img-responsive user-avatar"
-                    src="https://antrean.bpjs-kesehatan.go.id/antrean-rs/libs/assets/images/male.png" alt="">
-            </div>
-            <div class="col-lg-7 top-50">
-
-                <form>
-
-                    <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
-
-                    <div class="form-floating">
-                        <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                        <label for="floatingInput">Email address</label>
-                    </div>
-                    <div class="form-floating">
-                        <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
-                        <label for="floatingPassword">Password</label>
-                    </div>
-
-                    <div class="checkbox mb-3">
-                        <label>
-                            <input type="checkbox" value="remember-me"> Remember me
-                        </label>
-                    </div>
-                    <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
-                    <p class="mt-5 mb-3 text-muted">&copy; 2017–2021</p>
-                </form>
-            </div>
-        </div>
-    </main> --}}
     <iframe id='print-iframe' name='printf'></iframe>
 
     {{-- Bootrap core js --}}
@@ -118,7 +85,7 @@
         function ant() {
             $.ajax({
                 type: "GET",
-                url: "/antrian/1",
+                url: "/antrian/{{ $unit_id }}",
                 dataType: 'json',
                 success: function(response) {
                    

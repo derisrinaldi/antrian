@@ -6,7 +6,7 @@
             <div class="card">
                 <div class="card-header">
                     <div class="text-center fw-bold fs-4 text-uppercase text-light">
-                        nomor antrean sedang berjalan
+                        nomor antrean {{ $loket->unit->unit_name }} sedang berjalan
                     </div>
                 </div>
                 <div class="card-body">
@@ -23,7 +23,7 @@
             <div class="card">
                 <div class="card-header">
                     <div class="text-center fw-bold fs-4 text-uppercase text-light">
-                        petugas panggil
+                        petugas panggil {{ $loket->unit->unit_name }} 
                     </div>
                 </div>
                 <div class="card-body">
@@ -105,7 +105,7 @@
 
             function nextQueue() {
                 var a = $("input[name='antrean']").val();
-                var data = "l={{ $loket->id }}&a=" + a;
+                var data = "l={{ $loket->id }}&a=" + a+"&u={{ $loket->unit->id }}";
                 $.ajax({
                     url: '{{ route('antrian.next') }}',
                     type: "get",

@@ -7,6 +7,7 @@ use App\Models\Antrian;
 use App\Models\Loket;
 use App\Models\Unit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 
 class AntrianController extends Controller
 {
@@ -15,9 +16,15 @@ class AntrianController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($id)
     {
         //
+        $id = Crypt::decrypt($id);
+        $unit = Unit::find($id);
+
+        $data['unit'] = $unit;
+        $data['unit_id'] = Crypt::encrypt($unit->id);
+        return view('pages.antrianadmisi.index', $data);
     }
 
     /**
@@ -86,9 +93,11 @@ class AntrianController extends Controller
         //
     }
 
-    public function getAntrian(Unit $unit)
+    public function getAntrian($unit)
     {
         # code...
+        $id = Crypt::decrypt($unit);
+        $unit = Unit::find($id);
         $query = Antrian::where('unit_id', $unit->id)
             ->where('created_at', 'like', date('Y-m-d') . "%")
             ->orderBy('antrian', 'desc')
@@ -125,16 +134,19 @@ class AntrianController extends Controller
         # code...
         $request->validate([
             'l' => 'required',
-            'a' => 'required'
+            'a' => 'required',
+            'u' => 'required'
         ]);
-        $data=['status'=>false];
+        $data = ['status' => false];
 
         $q_antrian  = Antrian::where('loket_id', '0')
+            ->where('unit_id', $request->u)
             ->where('status', $request->a)
             ->where('created_at', 'like', date('Y-m-d') . "%")
             ->orderBy('antrian', 'asc');
 
         $q_res_antrian = Antrian::where('loket_id', $request->l)
+            ->where('unit_id', $request->u)
             ->where('status', '1')
             ->where('created_at', 'like', date('Y-m-d') . "%");
 
@@ -153,8 +165,8 @@ class AntrianController extends Controller
             }
             $loket = Loket::find($request->l);
             event(new SendMessage($loket->loket_name, $_queue->antrian));
-            $data['status']=true;
-            $data['queue']=$_queue;
+            $data['status'] = true;
+            $data['queue'] = $_queue;
         }
         return response()->json($data);
     }
