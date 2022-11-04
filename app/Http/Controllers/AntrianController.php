@@ -127,6 +127,7 @@ class AntrianController extends Controller
             'l' => 'required',
             'a' => 'required'
         ]);
+        $data=['status'=>false];
 
         $q_antrian  = Antrian::where('loket_id', '0')
             ->where('status', $request->a)
@@ -152,8 +153,10 @@ class AntrianController extends Controller
             }
             $loket = Loket::find($request->l);
             event(new SendMessage($loket->loket_name, $_queue->antrian));
+            $data['status']=true;
+            $data['queue']=$_queue;
         }
-        return response()->json($_queue);
+        return response()->json($data);
     }
 
     private function updateAntrian($id, $loket)

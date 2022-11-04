@@ -60,14 +60,16 @@
                                 @php
                                     $v_next = '';
                                     $v_ulang = '';
+                                    $v_st_group = '';
                                 @endphp
                                 @if ($antrian != null && $antrian->status == '1')
                                     @php
                                         $v_next = 'visually-hidden';
-                                    @endphp
+                                        @endphp
                                 @else
-                                    @php
+                                @php
                                         $v_ulang = 'visually-hidden';
+                                        $v_st_group = 'visually-hidden';
                                     @endphp
                                 @endif
                                 <button class="btn btn-success {{ $v_next }}" type="button" id="next"
@@ -82,7 +84,7 @@
                     <div class="row">
                         <label for="" class="col-sm-3"></label>
                         <div class="col-sm-9">
-                            <div class="d-grid">
+                            <div class="d-grid {{ $v_st_group }}" id="status-group">
                                 <button class="btn btn-info mb-1" onclick="updateStatus('2')"><i
                                         class="bi bi-check"></i>Selesai Dilayani</button>
                                 <button class="btn btn-danger mb-1" onclick="updateStatus('3')"><i
@@ -114,10 +116,16 @@
                     },
                     success: function(data) {
                         console.log(data);
-                        $("#antrian").html(data.antrian);
-                        antrian_id = data.id;
-                        $('#next').addClass('visually-hidden');
-                        $('#ulang').removeClass('visually-hidden')
+                        if (data.status == true) {
+                            $("#antrian").html(data.queue.antrian);
+                            antrian_id = data.queue.id;
+                            $('#next').addClass('visually-hidden');
+                            $('#ulang').removeClass('visually-hidden')
+                            $('#status-group').removeClass('visually-hidden')
+                        } else {
+                            $('#next').removeAttr('disabled');
+                            Swal.fire('Tidak Ada Nomor Antrian', '', 'info')
+                        }
                     }
                 })
             }
@@ -165,9 +173,12 @@
                                 $('#ulang').attr('disabled', 'true');
                             },
                             success: function() {
+                                $('#next').removeAttr('disabled');
                                 $('#ulang').removeAttr('disabled');
                                 $('#ulang').addClass('visually-hidden');
                                 $('#next').removeClass('visually-hidden')
+                                $('#status-group').addClass('visually-hidden')
+
                             }
                         })
                     }
