@@ -16,7 +16,7 @@ class UnitController extends Controller
     public function index()
     {
         //
-        return view('pages.unit.index',['title'=>'Unit']);
+        return view('pages.unit.index', ['title' => 'Unit']);
     }
 
     /**
@@ -40,12 +40,12 @@ class UnitController extends Controller
     {
         //
         $validate = $request->validate([
-            'unit_name'=>'required',
+            'unit_name' => 'required',
         ]);
 
         Unit::create($validate);
 
-        return back()->with('success','unit berhasil ditambahkan');
+        return back()->with('success', 'unit berhasil ditambahkan');
     }
 
     /**
@@ -68,6 +68,7 @@ class UnitController extends Controller
     public function edit(Unit $unit)
     {
         //
+        return view('pages.unit.edit', ['unit' => $unit]);
     }
 
     /**
@@ -80,6 +81,13 @@ class UnitController extends Controller
     public function update(Request $request, Unit $unit)
     {
         //
+        $validate = $request->validate([
+            'unit_name' => 'required',
+        ]);
+
+        Unit::where('id', $unit->id)->update($validate);
+
+        return redirect(route('unit.index'))->with('success', 'unit berhasil diupdate');
     }
 
     /**
@@ -92,11 +100,13 @@ class UnitController extends Controller
     {
         //
     }
-     // datatable data 
-     public function data()
-     {
-         # code...
-         $unit = Unit::all();
-         return DataTables::of($unit)->make();
-     }
+    // datatable data 
+    public function data()
+    {
+        # code...
+        $unit = Unit::all();
+        return DataTables::of($unit)->addColumn('action', function (Unit $unit) {
+            return '<a href="' . route('unit.edit', $unit->id) . '" class="btn btn-warning"><i class="bi bi-pencil-square"></i></a>';
+        })->make();
+    }
 }
