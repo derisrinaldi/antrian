@@ -66,7 +66,7 @@
             </div>
             <div class="col-lg-3">
                 <div class="text-end">
-                    asdfa</div>
+                    <i class="bi bi-bug-fill"></i></div>
             </div>
 
         </div>
