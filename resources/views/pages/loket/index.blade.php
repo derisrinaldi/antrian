@@ -5,15 +5,14 @@
         <div class="card-body">
             <div class="row ">
                 <div class="col d-flex justify-content-end">
+                    @foreach ($unit as $u)
+                        <button class="btn btn-sm btn-primary me-1" onclick="addLoket('{{ $u->id }}')">
+                            <i class="bi bi-plus"></i>
+                            {{ $u->unit_name }}
+                        </button>
+                    @endforeach
 
-                    <button class="btn btn-sm btn-primary me-1" onclick="addLoket('{{ $unit[0]->id }}')">
-                        <i class="bi bi-plus"></i>
-                        Admisi
-                    </button>
-                    <button class="btn btn-sm btn-info text-white " onclick="addLoket('{{ $unit[1]->id }}')">
-                        <i class="bi bi-plus"></i>
-                        Farmasi
-                    </button>
+                   
                 </div>
             </div>
             <div class="table-responsive mt-2">
@@ -34,44 +33,45 @@
     @push('script')
         <script>
             var table = $('#table').DataTable({
-                    processing: true,
-                    serverSide: true,
-                    ordering: false,
-                    ajax: '{{ route('loket.data') }}',
-                    columns: [{
-                            data: 'loket_name',
-                            name: 'loket_name'
-                        },
-                        {
-                            data: 'unit.unit_name',
-                            name: 'unit.unit_name'
-                        },
-                    ],
-                    // initComplete: function() {
-                    //     this.api().column(1).each(function() {
-                    //         var column = this;
-                    //         var input = document.createElement('input');
-                    //         $("<input class=form-control>").appendTo($(column.header()))
-                    //             .on('keyup change clear', function() {
-                    //                 var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                processing: true,
+                serverSide: true,
+                ordering: false,
+                ajax: '{{ route('loket.data') }}',
+                columns: [{
+                        data: 'loket_name',
+                        name: 'loket_name'
+                    },
+                    {
+                        data: 'unit.unit_name',
+                        name: 'unit.unit_name'
+                    },
+                ],
+                // initComplete: function() {
+                //     this.api().column(1).each(function() {
+                //         var column = this;
+                //         var input = document.createElement('input');
+                //         $("<input class=form-control>").appendTo($(column.header()))
+                //             .on('keyup change clear', function() {
+                //                 var val = $.fn.dataTable.util.escapeRegex($(this).val());
 
-                    //                 column.search(val ? val : '', true, false).draw();
-                    //             });
-                    //     });
-                    //     this.api().column(2).each(function() {
-                    //         var column = this;
-                    //         var input = document.createElement('input');
-                    //         $("<select class=form-select><option value=''>Semua</option><option value=''>Semua</option></select>").appendTo(
-                    //                 $(column.header()))
-                    //             .on('change', function() {
-                    //                 var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                //                 column.search(val ? val : '', true, false).draw();
+                //             });
+                //     });
+                //     this.api().column(2).each(function() {
+                //         var column = this;
+                //         var input = document.createElement('input');
+                //         $("<select class=form-select><option value=''>Semua</option><option value=''>Semua</option></select>").appendTo(
+                //                 $(column.header()))
+                //             .on('change', function() {
+                //                 var val = $.fn.dataTable.util.escapeRegex($(this).val());
 
-                    //                 column.search(val ? '^' + val + '$' : '', true, false).draw();
-                    //             });
-                    //     });
+                //                 column.search(val ? '^' + val + '$' : '', true, false).draw();
+                //             });
+                //     });
 
-                    // }
-                });
+                // }
+            });
+
             function addLoket(id) {
                 Swal.fire({
                     title: 'Yakin Ingin Menambah Loket?',
@@ -80,20 +80,20 @@
                 }).then((result) => {
                     /* Read more about isConfirmed, isDenied below */
                     if (result.isConfirmed) {
-                        var data = "unit_id="+id+"&_token={{ csrf_token(); }}";
+                        var data = "unit_id=" + id + "&_token={{ csrf_token() }}";
                         $.ajax({
-                            type:'post',
-                            data:data,
-                            dataType:'json',
-                            url:"{{ route('loket.store') }}",
-                            success:function(res){
-                                Swal.fire(res.loket,'', 'success')
+                            type: 'post',
+                            data: data,
+                            dataType: 'json',
+                            url: "{{ route('loket.store') }}",
+                            success: function(res) {
+                                Swal.fire(res.loket, '', 'success')
                                 table.ajax.reload();
 
                             }
 
                         })
-                    } 
+                    }
                 })
             }
 

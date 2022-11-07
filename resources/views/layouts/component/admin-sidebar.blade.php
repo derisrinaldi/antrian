@@ -6,13 +6,19 @@
         </h6>
         <ul class="nav flex-column">
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">
+                <a class="nav-link" aria-current="page" href="#">
                     <i class="bi bi-bar-chart-fill"></i>
                     Dashboard
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link {{ Route::is('unit*') ? 'active':'' }}" href="{{ route('unit.index') }}">
+                    <i class="bi bi-hdd-rack-fill"></i>
+                    unit
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ Route::is('loket*') ? 'active':'' }}" href="{{ route('loket.index') }}">
                     <i class="bi bi-hdd-rack-fill"></i>
                     Loket
                 </a>

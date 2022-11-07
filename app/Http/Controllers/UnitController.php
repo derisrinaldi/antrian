@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Unit;
 use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
 
 class UnitController extends Controller
 {
@@ -15,7 +16,7 @@ class UnitController extends Controller
     public function index()
     {
         //
-        return view('pages.unit.index');
+        return view('pages.unit.index',['title'=>'Unit']);
     }
 
     /**
@@ -26,6 +27,7 @@ class UnitController extends Controller
     public function create()
     {
         //
+        return view('pages.unit.create');
     }
 
     /**
@@ -37,6 +39,13 @@ class UnitController extends Controller
     public function store(Request $request)
     {
         //
+        $validate = $request->validate([
+            'unit_name'=>'required',
+        ]);
+
+        Unit::create($validate);
+
+        return back()->with('success','unit berhasil ditambahkan');
     }
 
     /**
@@ -83,4 +92,11 @@ class UnitController extends Controller
     {
         //
     }
+     // datatable data 
+     public function data()
+     {
+         # code...
+         $unit = Unit::all();
+         return DataTables::of($unit)->make();
+     }
 }
