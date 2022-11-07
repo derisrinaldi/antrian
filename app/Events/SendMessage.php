@@ -2,6 +2,8 @@
 
 namespace App\Events;
 
+use App\Models\Loket;
+use App\Models\Unit;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -14,18 +16,20 @@ use Illuminate\Queue\SerializesModels;
 class SendMessage implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-    private $antrian,$loket;
+    private Loket $loket;
+    private $antrian,$channel;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($loket,$antrian)
+    public function __construct($channel,$loket,$antrian)
     {
         //
-        $this->loket = $loket;
+        $this->loket = Loket::find($loket);
         $this->antrian = $antrian;
+        $this->channel = $channel;
     }
 
     /**
@@ -35,7 +39,7 @@ class SendMessage implements ShouldBroadcastNow
      */
     public function broadcastOn()
     {
-        return new Channel('coba');
+        return new Channel($this->channel);
     }
 
     /**
@@ -55,6 +59,7 @@ class SendMessage implements ShouldBroadcastNow
      */
     public function broadcastWith()
     {
-        return ['antrian'=>$this->antrian,'loket'=>$this->loket];
+        $unit = Unit::find($this->loket->unit_id);
+        return ['antrian'=>$this->antrian,'loket'=>$this->loket->loket_name,'unit'=>$unit->unit_name];
     }
 }

@@ -163,8 +163,11 @@ class AntrianController extends Controller
                 $q_res_antrian->where('id', $antrian->id);
                 $_queue = $q_res_antrian->get()->first();
             }
-            $loket = Loket::find($request->l);
-            event(new SendMessage($loket->loket_name, $_queue->antrian));
+            $loket = Loket::with(['unit'])->find($request->l);
+            $channel_all = strtolower(implode('-', [str_replace(' ', '_', $loket->unit->unit_name), 'all']));
+            $channel_loket = strtolower(implode('-', [str_replace(' ', '_', $loket->unit->unit_name), str_replace(' ', '_', $loket->loket_name)]));
+            event(new SendMessage($channel_all, $loket->id, $_queue->antrian));
+            event(new SendMessage($channel_loket, $loket->id, $_queue->antrian));
             $data['status'] = true;
             $data['queue'] = $_queue;
         }
@@ -187,8 +190,12 @@ class AntrianController extends Controller
             'a_id' => 'required'
         ]);
         $antrian = Antrian::find($request->a_id);
-        $loket = Loket::find($antrian->loket_id);
-        event(new SendMessage($loket->loket_name, $antrian->antrian));
+        $loket = Loket::with(['unit'])->find($antrian->loket_id);
+        $channel_all = strtolower(implode('-', [str_replace(' ', '_', $loket->unit->unit_name), 'all']));
+        $channel_loket = strtolower(implode('-', [str_replace(' ', '_', $loket->unit->unit_name), str_replace(' ', '_', $loket->loket_name)]));
+
+        event(new SendMessage($channel_all,$loket->id, $antrian->antrian));
+        event(new SendMessage($channel_loket,$loket->id, $antrian->antrian));
     }
 
     public function updateStatus(Request $request)

@@ -1,9 +1,12 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AntrianController;
 use App\Http\Controllers\CallerController;
+use App\Http\Controllers\DisplayController;
 use App\Http\Controllers\LoketController;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\UnitController;
 use App\Models\Loket;
 use App\Models\User;
 use Illuminate\Support\Facades\App;
@@ -21,9 +24,7 @@ use Yajra\DataTables\Facades\DataTables;
 |
 */
 
-Route::get('/dashboard',function(){
-    return view('pages.loket.index',['title'=>'Loket']);
-});
+Route::get('/dashboard',[AdminController::class,'index']);
 
 Route::get('/data',function(){
     $user = User::all();
@@ -38,13 +39,12 @@ Route::get("/antrian/{unit}",[AntrianController::class,"getAntrian"]);
 Route::resource('/loket',LoketController::class);
 Route::get('/data/loket',[LoketController::class,"data"])->name('loket.data');
 
-Route::get('/display',function(){
-    return view('layouts.display.app');
-});
-
+Route::get('/display/{unit_id}/{loket_id}',[DisplayController::class,'index']);
 Route::get('/caller/{unit_id}/{loket_id}',[CallerController::class,'index']);
 
 Route::get("/nextQueue",[AntrianController::class,"nextQueue"])->name('antrian.next');
 Route::get("/repeatQueue",[AntrianController::class,"repeatQueue"])->name('antrian.repeat');
 Route::get("/updateStatus",[AntrianController::class,"updateStatus"])->name('antrian.status.update');
 Route::get('/',[MenuController::class,'index']);
+
+Route::resource('/dashboard/unit', UnitController::class);

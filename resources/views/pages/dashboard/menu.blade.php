@@ -93,7 +93,7 @@
                                
 
                             </select>
-                            <button class="btn btn-danger" >Open</button>
+                            <button class="btn btn-danger" onclick="openDisplay()">Open</button>
                         </div>
                     </div>
                 </div>
@@ -103,7 +103,7 @@
                     <div class="card-body text-center">
                         <h5 class="card-title text-uppercase">administrator</h5>
                         <div class="form-group  visually-hidden" id="form4">
-                            <button class="btn btn-danger">Open</button>
+                            <button class="btn btn-danger" onclick="return window.open('/dashboard','_blank')">Open</button>
                         </div>
                     </div>
                 </div>
@@ -149,6 +149,12 @@
             var unit = $('#caller').val();
             var loket = $('#caller_loket').val();
             window.open('/caller/' + unit+'/'+loket, '_blank')
+        }
+
+        function openDisplay() {
+            var unit = $('#display').val();
+            var loket = $('#display_loket').val();
+            window.open('/display/' + unit+'/'+loket, '_blank')
         }
 
         function getLoket(id,dest){

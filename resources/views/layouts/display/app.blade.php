@@ -68,11 +68,12 @@
                     </div>
                     <div class="card-body text-center">
                         <div class="fw-bold" id="antrian" style="font-size:120px">0</div>
-                        <div class="fw-bold mt-2" id="loket" style="font-size: 50px; line-height: 0.8;">Loket 1
+                        <div class="fw-bold mt-2" id="loket" style="font-size: 50px; line-height: 0.8;">
+                            {{ is_array($loket) ? '':$loket->loket_name }}
                         </div>
                         <hr style="border-color: #1ABC9C;">
                         <div class="text-uppercase" style="font-size: 30px; margin-top: 0px; line-height: 0.8;">antrian
-                            admisi</div>
+                            {{ $unit->unit_name }}</div>
                     </div>
                 </div>
             </div>
@@ -99,7 +100,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.1.1/howler.min.js"></script>
     <script></script>
     <script type="text/javascript">
-        window.Echo.channel('coba')
+        window.Echo.channel('{{ $channel }}')
             .listen('.UserEvent', (data) => {
                 console.log(data)
                 $('#antrian').html(data.antrian);
@@ -108,7 +109,7 @@
                     src: ['{{ asset('audio/airport.mp3') }}'],
                     volume: 0.7,
                     onend: function() {
-                        responsiveVoice.speak("Antrian, " + data.antrian + ", " + data.loket + ".",
+                        responsiveVoice.speak("Antrian, " + data.antrian + ", " + data.loket + ","+data.unit,
                             "Indonesian Male", {
                                 pitch: 1,
                                 rate: 0.8
