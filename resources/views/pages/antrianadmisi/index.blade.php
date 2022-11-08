@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.84.0">
-    <title>Signin Template · Bootstrap v5.0</title>
+    <title>{{ env('APP_NAME') }}</title>
 
 
     <!-- Bootstrap core CSS -->
@@ -57,22 +57,36 @@
         <div class="login-page">
             <div class="img-container">
                 <div class="text-center pull-right photo">
-                    <img src="{{ asset('images/avatar.png') }}"
-                        class="user-avatar img-circle img-responsive float-end">
+                    <img src="{{ asset('images/avatar.png') }}" class="user-avatar img-circle img-responsive float-end">
                 </div>
             </div>
             <div class="form-content">
-                <h1>PENDAFTARAN / {{ $unit->unit_name }}</h1>
-                <h5 style="margin-top:10px;margin-bottom:10px;font-size:14px;">Silahkan ambil nomor antrian dibawah</h5>
-                <button onclick="ant()"
-                    class="block card bg-warning my-btn text-decoration-none text-center text-white">
+                <div class="mb-4">
+                    <h1>PENDAFTARAN / {{ $unit->unit_name }}</h1>
+                    <h5 style="margin-top:10px;margin-bottom:10px;font-size:14px;">Silahkan ambil nomor antrian dibawah
+                    </h5>
+                    <button onclick="ant('{{ $unit_id }}')"
+                        class="block card bg-warning my-btn text-decoration-none text-center text-white">
 
-                    <i class="bi bi-chevron-down"></i>
-                    <span class="text-info font-thin h1 block" style="font-weight:bold">Klik Disini</span>
-                    <i class="bi bi-chevron-up"></i>
+                        <i class="bi bi-chevron-down"></i>
+                        <span class="text-info font-thin h1 block" style="font-weight:bold">Klik Disini</span>
+                        <i class="bi bi-chevron-up"></i>
+                    </button>
+                </div>
+                @if(isset($unit2))
+                <div class="mb-4">
+                    <h1>PENDAFTARAN / {{ $unit2->unit_name }}</h1>
+                    <h5 style="margin-top:10px;margin-bottom:10px;font-size:14px;">Silahkan ambil nomor antrian dibawah
+                    </h5>
+                    <button onclick="ant('{{ $unit_id2 }}')"
+                        class="block card bg-success my-btn text-decoration-none text-center text-white">
 
-
-                </button>
+                        <i class="bi bi-chevron-down"></i>
+                        <span class="text-white font-thin h1 block" style="font-weight:bold">Klik Disini</span>
+                        <i class="bi bi-chevron-up"></i>
+                    </button>
+                </div>
+                @endif
             </div>
         </div>
     </div>
@@ -82,23 +96,23 @@
     {{-- Bootrap core js --}}
     <script src="{{ asset('js/app.js') }}"></script>
     <script>
-        function ant() {
+        function ant(unit_id) {
             $.ajax({
                 type: "GET",
-                url: "/antrian/{{ $unit_id }}",
+                url: "/antrian/" + unit_id,
                 dataType: 'json',
                 success: function(response) {
-                   
+
                     var newWin = window.frames["printf"];
                     newWin.document.body.innerHTML = '';
                     newWin.document.write(
                         '<center>' +
                         '<h4>RS PERMATA KUNIGAN</h4>' +
                         '<p style="font-size: 12px">' + response.date + '</p>' +
-                        '<span style="display: inline-block;width: 20%;border-top: 2px solid black;"></span>' +
+                        '<span style="display: inline-block;width: 50%;border-top: 2px solid black;"></span>' +
                         '<h1 style="font-size: 46px">' + response.antrian + '</h1>' +
                         '<h6>' + response.unit + '</h6>' +
-                        '<span style="display: inline-block;width: 20%;border-top: 2px solid black;"></span>' +
+                        '<span style="display: inline-block;width: 50%;border-top: 2px solid black;"></span>' +
                         '<p>Sisa Antrean : ' + response.rest + '</p>' +
                         '<p style="font-size: 8px">*) Silahkan mengambil nomor antrian baru,<br>jika nomor antrian terlewatkan</p>' +
                         '</center>'
@@ -108,7 +122,7 @@
                     Swal.fire({
                         title: response.antrian,
                         icon: 'success',
-                        timer:500
+                        timer: 500
                     })
                 }
             })

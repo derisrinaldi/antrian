@@ -16,10 +16,16 @@ class AntrianController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($id)
+    public function index($id, $id2)
     {
         //
         $id = Crypt::decrypt($id);
+        $id2 = Crypt::decrypt($id2);
+        if ($id2 != "nothing") {
+            $unit2 = Unit::find($id2);
+            $data['unit2'] = $unit2;
+            $data['unit_id2'] = Crypt::encrypt($unit2->id);
+        }
         $unit = Unit::find($id);
 
         $data['unit'] = $unit;
@@ -194,8 +200,8 @@ class AntrianController extends Controller
         $channel_all = strtolower(implode('-', [str_replace(' ', '_', $loket->unit->unit_name), 'all']));
         $channel_loket = strtolower(implode('-', [str_replace(' ', '_', $loket->unit->unit_name), str_replace(' ', '_', $loket->loket_name)]));
 
-        event(new SendMessage($channel_all,$loket->id, $antrian->antrian));
-        event(new SendMessage($channel_loket,$loket->id, $antrian->antrian));
+        event(new SendMessage($channel_all, $loket->id, $antrian->antrian));
+        event(new SendMessage($channel_loket, $loket->id, $antrian->antrian));
     }
 
     public function updateStatus(Request $request)

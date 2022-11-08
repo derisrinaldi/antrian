@@ -24,7 +24,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="{{ route('setting.index') }}">
                     <i class="bi bi-camera-video-fill"></i>
                     Setting
                 </a>

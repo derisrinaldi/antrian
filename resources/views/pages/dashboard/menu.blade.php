@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.84.0">
-    <title></title>
+    <title>{{ env('APP_NAME') }}</title>
 
     <!-- Bootstrap core CSS -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
@@ -36,7 +36,7 @@
         <div class="row pt-5 mb-5">
             <div class="col text-center">
                 <h1 class="mb-2 text-light" style="font-size: 65px">Dashboard</h1>
-                <h2 class="text-light" style="font-size:30px"><i>RS Permata Kuningan</i></h2>
+                <h2 class="text-light" style="font-size:30px"><i>{{ env('APP_NAME') }}</i></h2>
             </div>
         </div>
         <div class="row">
@@ -46,6 +46,16 @@
                         <h5 class="card-title text-uppercase">console box</h5>
                         <div class="form-group visually-hidden" id="form1">
                             <select name="" id="console" class="form-select mb-2">
+                                @foreach ($unit as $u)
+                                    @if ($u->loket->count() != 0)
+                                        <option value="{{ Crypt::encrypt($u->id) }}">{{ $u->unit_name }}</option>
+                                    @endif
+                                @endforeach
+                            </select>
+
+                            <label for="" class="mb-1">Pilih Console ke 2 jika perlu</label>
+                            <select name="" id="console2" class="form-select mb-2">
+                                <option value="{{ Crypt::encrypt('nothing') }}">--Pilih Console ke 2--</option>
                                 @foreach ($unit as $u)
                                     @if ($u->loket->count() != 0)
                                         <option value="{{ Crypt::encrypt($u->id) }}">{{ $u->unit_name }}</option>
@@ -142,7 +152,8 @@
 
         function openConsole(id) {
             var unit = $('#' + id).val();
-            window.open('/console/' + unit, '_blank')
+            var unit2 = $('#console2').val();
+            window.open('/console/' + unit+'/'+unit2, '_blank')
         }
 
         function openCaller() {

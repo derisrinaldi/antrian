@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.84.0">
-    <title></title>
+    <title>{{ env('APP_NAME') }}</title>
 
     <!-- Bootstrap core CSS -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
@@ -61,7 +61,7 @@
             </div>
             <div class="col-lg-6">
                 <div class="text-center">
-                    <h3 class="fw-bolder">Rumah Sakit Permata Kuningan</h3>
+                    <h3 class="fw-bolder">{{ env('APP_NAME') }}</h3>
                 </div>
             </div>
             <div class="col-lg-3">

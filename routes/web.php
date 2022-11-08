@@ -6,6 +6,7 @@ use App\Http\Controllers\CallerController;
 use App\Http\Controllers\DisplayController;
 use App\Http\Controllers\LoketController;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\UnitController;
 use App\Models\Loket;
 use App\Models\User;
@@ -32,7 +33,7 @@ Route::get('/data',function(){
     return DataTables::of($user)->make();
 })->name('data');
 
-Route::get('/console/{id}',[AntrianController::class,'index'])->name('antrian.console');
+Route::get('/console/{id}/{id2}',[AntrianController::class,'index'])->name('antrian.console');
 
 Route::get("/antrian/{unit}",[AntrianController::class,"getAntrian"]);
 
@@ -49,3 +50,4 @@ Route::get("/updateStatus",[AntrianController::class,"updateStatus"])->name('ant
 Route::get('/',[MenuController::class,'index']);
 
 Route::resource('/dashboard/unit', UnitController::class);
+Route::get('/dashboard/setting',[SettingController::class,'index'])->name('setting.index');
