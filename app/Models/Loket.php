@@ -17,4 +17,10 @@ class Loket extends Model
         # code...
         return $this->belongsTo(Unit::class);
     }
+
+    public function antrian()
+    {
+        # code...
+        return $this->hasMany(Antrian::class);
+    }
 }

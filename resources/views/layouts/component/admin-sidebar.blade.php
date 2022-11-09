@@ -6,7 +6,7 @@
         </h6>
         <ul class="nav flex-column">
             <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="#">
+                <a class="nav-link {{ Route::is('admin*') ? 'active':'' }}" aria-current="page" href="{{ route('admin') }}">
                     <i class="bi bi-bar-chart-fill"></i>
                     Dashboard
                 </a>

@@ -8,6 +8,7 @@ use App\Models\Loket;
 use App\Models\Unit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
+use Yajra\DataTables\Facades\DataTables;
 
 class AntrianController extends Controller
 {
@@ -213,5 +214,36 @@ class AntrianController extends Controller
         ]);
         Antrian::where('id', $request->a_id)
             ->update(['status' => $request->s]);
+    }
+
+    public function data(Request $request)
+    {
+        # code...
+        $antrian = Antrian::with(['unit','loket'])
+        ->where('created_at','like',$request->tanggal."%")
+        ->get()->all();
+        $data= DataTables::of($antrian)
+        ->editColumn('loket.loket_name',function(Antrian $antrian){
+            return $antrian->loket->loket_name ?? "";
+        })
+        ->editColumn('status',function(Antrian $antrian){
+            $status = "";
+            switch($antrian->status){
+                case 0 : $status= "Menunggu";break;
+                case 1 : $status= "Sedang Dilayani";break;
+                case 2 : $status= "Selesai";break;
+                case 3 : $status= "Tidak Hadir";break;
+                case 4 : $status= "Lewati";break;
+            }
+            return $status;
+        })
+        ->editColumn('created_at',function(Antrian $antrian){
+            return date('H:i:s',strtotime($antrian->created_at));
+        })
+        ->editColumn('updated_at',function(Antrian $antrian){
+            return $antrian->updated_at == $antrian->created_at ? "-":date('H:i:s',strtotime($antrian->created_at));
+        })
+        ->make();
+        return $data;
     }
 }

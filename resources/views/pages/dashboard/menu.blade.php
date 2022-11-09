@@ -113,7 +113,7 @@
                     <div class="card-body text-center">
                         <h5 class="card-title text-uppercase">administrator</h5>
                         <div class="form-group  visually-hidden" id="form4">
-                            <button class="btn btn-danger" onclick="return window.open('/dashboard','_blank')">Open</button>
+                            <button class="btn btn-danger" onclick="return window.open('{{ route('admin') }}','_blank')">Open</button>
                         </div>
                     </div>
                 </div>

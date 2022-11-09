@@ -16,4 +16,10 @@ class Antrian extends Model
         # code...
         return $this->belongsTo(Unit::class,'unit_id','id');
     }
+
+    public function loket()
+    {
+        # code...
+        return $this->belongsTo(Loket::class);
+    }
 }

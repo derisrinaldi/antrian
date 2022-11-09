@@ -25,7 +25,7 @@ use Yajra\DataTables\Facades\DataTables;
 |
 */
 
-Route::get('/dashboard',[AdminController::class,'index']);
+Route::get('/dashboard/admin',[AdminController::class,'index'])->name('admin');
 
 Route::get('/data',function(){
     $user = User::all();
@@ -40,6 +40,7 @@ Route::get("/antrian/{unit}",[AntrianController::class,"getAntrian"]);
 Route::resource('/loket',LoketController::class);
 Route::get('/data/loket',[LoketController::class,"data"])->name('loket.data');
 Route::get('/data/unit',[UnitController::class,"data"])->name('unit.data');
+Route::get('/data/antrian',[AntrianController::class,"data"])->name('antrian.data');
 
 Route::get('/display/{unit_id}/{loket_id}',[DisplayController::class,'index']);
 Route::get('/caller/{unit_id}/{loket_id}',[CallerController::class,'index']);
