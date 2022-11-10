@@ -23,12 +23,24 @@
             <div class="card">
                 <div class="card-header">
                     <div class="text-center fw-bold fs-4 text-uppercase text-light">
-                        petugas panggil {{ $loket->unit->unit_name }} 
+                        petugas panggil
                     </div>
                 </div>
                 <div class="card-body">
                     <div class="col-lg-12 text-center">
                         <h5 class="fw-bold">{{ $loket->loket_name }}</h5>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <label for="" class="col-sm-3">Unit</label>
+                        <div class="col-sm-9">
+                            <select name="unit_id" id="unit_id" class="form-select">
+                                @foreach ($unit as $u)
+                                    <option value="{{ $u->id }}" @if ($u->id == $loket->unit_id) selected @endif>
+                                        {{ $u->unit_name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
                     <hr>
                     <div class="row">
@@ -65,9 +77,9 @@
                                 @if ($antrian != null && $antrian->status == '1')
                                     @php
                                         $v_next = 'visually-hidden';
-                                        @endphp
+                                    @endphp
                                 @else
-                                @php
+                                    @php
                                         $v_ulang = 'visually-hidden';
                                         $v_st_group = 'visually-hidden';
                                     @endphp
@@ -105,7 +117,9 @@
 
             function nextQueue() {
                 var a = $("input[name='antrean']").val();
-                var data = "l={{ $loket->id }}&a=" + a+"&u={{ $loket->unit->id }}";
+                var u = $('#unit_id').val();
+                console.log(u);
+                var data = "l={{ $loket->id }}&a=" + a + "&u="+u;
                 $.ajax({
                     url: '{{ route('antrian.next') }}',
                     type: "get",

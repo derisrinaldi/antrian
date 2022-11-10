@@ -33,7 +33,7 @@ Route::get('/data',function(){
     return DataTables::of($user)->make();
 })->name('data');
 
-Route::get('/console/{id}/{id2}',[AntrianController::class,'index'])->name('antrian.console');
+Route::get('/console/{id}/{id2}/{id3}',[AntrianController::class,'index'])->name('antrian.console');
 
 Route::get("/antrian/{unit}",[AntrianController::class,"getAntrian"]);
 
@@ -42,8 +42,8 @@ Route::get('/data/loket',[LoketController::class,"data"])->name('loket.data');
 Route::get('/data/unit',[UnitController::class,"data"])->name('unit.data');
 Route::get('/data/antrian',[AntrianController::class,"data"])->name('antrian.data');
 
-Route::get('/display/{unit_id}/{loket_id}',[DisplayController::class,'index']);
-Route::get('/caller/{unit_id}/{loket_id}',[CallerController::class,'index']);
+Route::get('/display/{loket_id}',[DisplayController::class,'index']);
+Route::get('/caller/{loket_id}',[CallerController::class,'index']);
 
 Route::get("/nextQueue",[AntrianController::class,"nextQueue"])->name('antrian.next');
 Route::get("/repeatQueue",[AntrianController::class,"repeatQueue"])->name('antrian.repeat');

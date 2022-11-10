@@ -4,15 +4,11 @@
     <div class="card">
         <div class="card-body">
             <div class="row ">
-                <div class="col d-flex justify-content-end">
-                    @foreach ($unit as $u)
-                        <button class="btn btn-sm btn-primary me-1" onclick="addLoket('{{ $u->id }}')">
-                            <i class="bi bi-plus"></i>
-                            {{ $u->unit_name }}
-                        </button>
-                    @endforeach
-
-                   
+                <div class="col d-flex justify-content-start">
+                    <a class="btn btn-sm btn-primary me-1" href="{{ route('loket.create') }}">
+                        <i class="bi bi-plus"></i>
+                        Create
+                    </a>
                 </div>
             </div>
             <div class="table-responsive mt-2">

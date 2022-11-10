@@ -47,9 +47,7 @@
                         <div class="form-group visually-hidden" id="form1">
                             <select name="" id="console" class="form-select mb-2">
                                 @foreach ($unit as $u)
-                                    @if ($u->loket->count() != 0)
-                                        <option value="{{ Crypt::encrypt($u->id) }}">{{ $u->unit_name }}</option>
-                                    @endif
+                                    <option value="{{ Crypt::encrypt($u->id) }}">{{ $u->unit_name }}</option>
                                 @endforeach
                             </select>
 
@@ -57,9 +55,15 @@
                             <select name="" id="console2" class="form-select mb-2">
                                 <option value="{{ Crypt::encrypt('nothing') }}">--Pilih Console ke 2--</option>
                                 @foreach ($unit as $u)
-                                    @if ($u->loket->count() != 0)
-                                        <option value="{{ Crypt::encrypt($u->id) }}">{{ $u->unit_name }}</option>
-                                    @endif
+                                    <option value="{{ Crypt::encrypt($u->id) }}">{{ $u->unit_name }}</option>
+                                @endforeach
+                            </select>
+
+                            <label for="" class="mb-1">Pilih Console ke 3 jika perlu</label>
+                            <select name="" id="console3" class="form-select mb-2">
+                                <option value="{{ Crypt::encrypt('nothing') }}">--Pilih Console ke 3--</option>
+                                @foreach ($unit as $u)
+                                    <option value="{{ Crypt::encrypt($u->id) }}">{{ $u->unit_name }}</option>
                                 @endforeach
                             </select>
                             <button class="btn btn-danger" onclick="openConsole('console')">Open</button>
@@ -72,15 +76,10 @@
                     <div class="card-body text-center">
                         <h5 class="card-title text-uppercase">Petugas Panggil</h5>
                         <div class="form-group  visually-hidden" id="form2">
-                            <select name="" id="caller" class="form-select mb-2" onchange="getLoket(this.id,'caller_loket')">
-                                @foreach ($unit as $u)
-                                    @if ($u->loket->count() != 0)
-                                        <option value="{{ $u->id }}">{{ $u->unit_name }}</option>
-                                    @endif
+                            <select name="" id="caller" class="form-select mb-2">
+                                @foreach ($loket as $l)
+                                    <option value="{{ $l->id }}">{{ $l->loket_name }}</option>
                                 @endforeach
-                            </select>
-                            <select name="" id="caller_loket" class="form-select mb-2">
-
                             </select>
                             <button class="btn btn-danger" onclick="openCaller()">Open</button>
                         </div>
@@ -92,16 +91,11 @@
                     <div class="card-body text-center">
                         <h5 class="card-title text-uppercase">Display</h5>
                         <div class="form-group  visually-hidden" id="form3">
-                            <select name="" id="display" class="form-select mb-2" onchange="getLoketDisplay(this.id,'display_loket')">
-                                @foreach ($unit as $u)
-                                    @if ($u->loket->count() != 0)
-                                        <option value="{{ $u->id }}">{{ $u->unit_name }}</option>
-                                    @endif
+                            <select name="" id="display" class="form-select mb-2">
+                                <option value="all">Semua Loket</option>
+                                @foreach ($loket as $l)
+                                    <option value="{{ $l->id }}">{{ $l->loket_name }}</option>
                                 @endforeach
-                            </select>
-                            <select name="" id="display_loket" class="form-select mb-2">
-                               
-
                             </select>
                             <button class="btn btn-danger" onclick="openDisplay()">Open</button>
                         </div>
@@ -113,7 +107,8 @@
                     <div class="card-body text-center">
                         <h5 class="card-title text-uppercase">administrator</h5>
                         <div class="form-group  visually-hidden" id="form4">
-                            <button class="btn btn-danger" onclick="return window.open('{{ route('admin') }}','_blank')">Open</button>
+                            <button class="btn btn-danger"
+                                onclick="return window.open('{{ route('admin') }}','_blank')">Open</button>
                         </div>
                     </div>
                 </div>
@@ -123,25 +118,25 @@
 
     <script src="{{ asset('js/app.js') }}"></script>
     <script>
-        $(()=>{
+        $(() => {
             $('#caller').trigger('change')
             $('#display').trigger('change')
         })
         var DataLoket = {
-            @foreach($unit as $u)
-                @if($u->loket->count() != 0)
-                    {{ $u->id }}:{
-                        loket:[
-                            @foreach($u->loket as $l)
+            @foreach ($unit as $u)
+                @if ($u->loket->count() != 0)
+                    {{ $u->id }}: {
+                        loket: [
+                            @foreach ($u->loket as $l)
                                 {
-                                    id:'{{ $l->id }}',
-                                    value:'{{ $l->loket_name }}',
+                                    id: '{{ $l->id }}',
+                                    value: '{{ $l->loket_name }}',
                                 },
                             @endforeach
                         ]
                     },
                 @endif
-            @endforeach()
+            @endforeach ()
         };
 
         function openCard(id, formId) {
@@ -153,39 +148,38 @@
         function openConsole(id) {
             var unit = $('#' + id).val();
             var unit2 = $('#console2').val();
-            window.open('/console/' + unit+'/'+unit2, '_blank')
+            var unit3 = $('#console3').val();
+            window.open('/console/' + unit + '/' + unit2+ '/' + unit3, '_blank')
         }
 
         function openCaller() {
-            var unit = $('#caller').val();
-            var loket = $('#caller_loket').val();
-            window.open('/caller/' + unit+'/'+loket, '_blank')
+            var loket = $('#caller').val();
+            window.open('/caller/' + loket, '_blank')
         }
 
         function openDisplay() {
-            var unit = $('#display').val();
-            var loket = $('#display_loket').val();
-            window.open('/display/' + unit+'/'+loket, '_blank')
+            var loket = $('#display').val();
+            window.open('/display/' + loket, '_blank')
         }
 
-        function getLoket(id,dest){
-            var unit =$("#"+id).val();
+        function getLoket(id, dest) {
+            var unit = $("#" + id).val();
             var d_loket = DataLoket[unit].loket;
-            var text ="";
-            for(var i=0;i<d_loket.length;i++){
-                text +='<option value="'+d_loket[i].id+'">'+d_loket[i].value+'</option>'
+            var text = "";
+            for (var i = 0; i < d_loket.length; i++) {
+                text += '<option value="' + d_loket[i].id + '">' + d_loket[i].value + '</option>'
             }
-            $('#'+dest).html(text);
+            $('#' + dest).html(text);
         }
 
-        function getLoketDisplay(id,dest){
-            var unit =$("#"+id).val();
+        function getLoketDisplay(id, dest) {
+            var unit = $("#" + id).val();
             var d_loket = DataLoket[unit].loket;
-            var text ='<option value="all">Semua Loket</option>';
-            for(var i=0;i<d_loket.length;i++){
-                text +='<option value="'+d_loket[i].id+'">'+d_loket[i].value+'</option>'
+            var text = '<option value="all">Semua Loket</option>';
+            for (var i = 0; i < d_loket.length; i++) {
+                text += '<option value="' + d_loket[i].id + '">' + d_loket[i].value + '</option>'
             }
-            $('#'+dest).html(text);
+            $('#' + dest).html(text);
         }
     </script>
 </body>

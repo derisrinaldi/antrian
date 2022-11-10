@@ -55,38 +55,66 @@
 <body>
     <div class="ui-base">
         <div class="login-page">
-            <div class="img-container">
-                <div class="text-center pull-right photo">
-                    <img src="{{ asset('images/avatar.png') }}" class="user-avatar img-circle img-responsive float-end">
-                </div>
-            </div>
+
             <div class="form-content">
-                <div class="mb-4">
-                    <h1>PENDAFTARAN / {{ $unit->unit_name }}</h1>
-                    <h5 style="margin-top:10px;margin-bottom:10px;font-size:14px;">Silahkan ambil nomor antrian dibawah
-                    </h5>
-                    <button onclick="ant('{{ $unit_id }}')"
-                        class="block card bg-warning my-btn text-decoration-none text-center text-white">
+                <div class="row">
+                    <div class="col d-flex justify-content-center mb-4">
+                        <div>
+                            <h1>PENDAFTARAN <br>  {{ $unit->unit_name }}</h1>
+                            <h5 style="margin-top:10px;margin-bottom:10px;font-size:14px;">Silahkan ambil nomor antrian
+                                dibawah
+                            </h5>
+                            <button onclick="ant('{{ $unit_id }}')"
+                                class="block card bg-warning my-btn text-decoration-none text-center text-white">
 
-                        <i class="bi bi-chevron-down"></i>
-                        <span class="text-info font-thin h1 block" style="font-weight:bold">Klik Disini</span>
-                        <i class="bi bi-chevron-up"></i>
-                    </button>
-                </div>
-                @if(isset($unit2))
-                <div class="mb-4">
-                    <h1>PENDAFTARAN / {{ $unit2->unit_name }}</h1>
-                    <h5 style="margin-top:10px;margin-bottom:10px;font-size:14px;">Silahkan ambil nomor antrian dibawah
-                    </h5>
-                    <button onclick="ant('{{ $unit_id2 }}')"
-                        class="block card bg-success my-btn text-decoration-none text-center text-white">
+                                <i class="bi bi-chevron-down"></i>
+                                <span class="text-info font-thin h1 block" style="font-weight:bold">Klik Disini</span>
+                                <i class="bi bi-chevron-up"></i>
+                            </button>
+                        </div>
 
-                        <i class="bi bi-chevron-down"></i>
-                        <span class="text-white font-thin h1 block" style="font-weight:bold">Klik Disini</span>
-                        <i class="bi bi-chevron-up"></i>
-                    </button>
+                    </div>
+                    @if (isset($unit2))
+                        <div class="col d-flex justify-content-center mb-4">
+                            <div>
+                                <h1>PENDAFTARAN <br>  {{ $unit2->unit_name }}</h1>
+                                <h5 style="margin-top:10px;margin-bottom:10px;font-size:14px;">Silahkan ambil nomor
+                                    antrian
+                                    dibawah
+                                </h5>
+                                <button onclick="ant('{{ $unit_id2 }}')"
+                                    class="block card bg-success my-btn text-decoration-none text-center text-white">
+
+                                    <i class="bi bi-chevron-down"></i>
+                                    <span class="text-white font-thin h1 block" style="font-weight:bold">Klik
+                                        Disini</span>
+                                    <i class="bi bi-chevron-up"></i>
+                                </button>
+                            </div>
+                        </div>
+                    @endif
+                    @if (isset($unit3))
+                        <div class="col d-flex justify-content-center mb-4">
+                            <div>
+                                <h1>PENDAFTARAN <br>  {{ $unit3->unit_name }}</h1>
+                                <h5 style="margin-top:10px;margin-bottom:10px;font-size:14px;">Silahkan ambil nomor
+                                    antrian
+                                    dibawah
+                                </h5>
+                                <button onclick="ant('{{ $unit_id3 }}')"
+                                    class="block card bg-danger my-btn text-decoration-none text-center text-white">
+
+                                    <i class="bi bi-chevron-down"></i>
+                                    <span class="text-white font-thin h1 block" style="font-weight:bold">Klik
+                                        Disini</span>
+                                    <i class="bi bi-chevron-up"></i>
+                                </button>
+                            </div>
+                        </div>
+                    @endif
                 </div>
-                @endif
+
+
             </div>
         </div>
     </div>

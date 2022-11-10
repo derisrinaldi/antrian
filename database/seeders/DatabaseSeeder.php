@@ -22,9 +22,5 @@ class DatabaseSeeder extends Seeder
         Unit::create([
             'unit_name'=>strtoupper("farmasi")
         ]);
-
-        Instansi::create([
-            'name'=>'Antrian'
-        ]);
     }
 }

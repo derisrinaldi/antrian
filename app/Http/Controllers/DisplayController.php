@@ -9,18 +9,20 @@ use Illuminate\Http\Request;
 class DisplayController extends Controller
 {
     //
-    public function index($unit_id, $loket_id)
+    public function index($loket_id)
     {
         # code...
         $loket = null;
-        $unit = Unit::find($unit_id);
+        $unit = null;
         
         if ($loket_id != "all") {
-            $loket =  Loket::with(['unit'])->find($loket_id);
-            $channel=strtolower(implode('-', [str_replace(' ', '_', $unit->unit_name),str_replace(' ', '_', $loket->loket_name)]));
+            $loket = Loket::with(['unit'])->find($loket_id);
+            $unit = $loket->unit;
+            $channel = str_replace(' ', '_', $loket->loket_name);
         } else {
-            $loket = Loket::with(['unit'])->where('unit_id', $unit_id)->get()->all();
-            $channel = strtolower(implode('-', [str_replace(' ', '_', $unit->unit_name), 'all']));
+            $loket =  [];
+            $unit = [];
+            $channel="all-loket";
         }
         $data = [
             'loket' => $loket,

@@ -34,6 +34,8 @@ class LoketController extends Controller
     public function create()
     {
         //
+        $unit =Unit::all();
+        return view('pages.loket.create',['unit'=>$unit]);
     }
 
     /**
@@ -46,22 +48,12 @@ class LoketController extends Controller
     {
         //
         $validate = $request->validate([
-            'unit_id'=>'required'
+            'unit_id'=>'required',
+            'loket_name'=>'required'
         ]);
 
-        $loket = Loket::where('unit_id',$request->unit_id)->get()->all();
-        if(count($loket) ==0){
-            $validate['loket_name']="Loket 1";
-            Loket::create($validate);
-        }else{
-            $validate['loket_name']="Loket ".count($loket)+1;
-            Loket::create($validate);
-        }
-
-        $loket = Loket::where('unit_id',$request->unit_id)->get()->last();
-
-        return response()->json(['loket'=>$loket->loket_name]);
-
+        Loket::create($validate);
+        return back()->with('success','Berhasil menambahkan loket');
     }
 
     /**

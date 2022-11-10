@@ -13,10 +13,12 @@ class MenuController extends Controller
     public function index()
     {
         # code...
-        $unit = Unit::with(['loket'])->get()->all();
+        $unit = Unit::all();
+        $loket = Loket::all();
        
         $data =[
             'unit'=>$unit,
+            'loket'=>$loket
         ];
         return view('pages.dashboard.menu',$data);
     }

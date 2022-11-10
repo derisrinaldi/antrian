@@ -17,6 +17,7 @@ class SendMessage implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
     private Loket $loket;
+    private Unit $unit;
     private $antrian,$channel;
 
     /**
@@ -24,10 +25,11 @@ class SendMessage implements ShouldBroadcastNow
      *
      * @return void
      */
-    public function __construct($channel,$loket,$antrian)
+    public function __construct($channel,$loket,$unit,$antrian)
     {
         //
         $this->loket = Loket::find($loket);
+        $this->unit = Unit::find($unit);
         $this->antrian = $antrian;
         $this->channel = $channel;
     }
@@ -59,7 +61,6 @@ class SendMessage implements ShouldBroadcastNow
      */
     public function broadcastWith()
     {
-        $unit = Unit::find($this->loket->unit_id);
-        return ['antrian'=>$this->antrian,'loket'=>$this->loket->loket_name,'unit'=>$unit->unit_name];
+        return ['antrian'=>$this->antrian,'loket'=>$this->loket->loket_name,'unit'=>$this->unit->unit_name];
     }
 }

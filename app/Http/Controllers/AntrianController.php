@@ -17,15 +17,21 @@ class AntrianController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($id, $id2)
+    public function index($id, $id2,$id3)
     {
         //
         $id = Crypt::decrypt($id);
         $id2 = Crypt::decrypt($id2);
+        $id3 = Crypt::decrypt($id3);
         if ($id2 != "nothing") {
             $unit2 = Unit::find($id2);
             $data['unit2'] = $unit2;
             $data['unit_id2'] = Crypt::encrypt($unit2->id);
+        }
+        if ($id3 != "nothing") {
+            $unit3 = Unit::find($id3);
+            $data['unit3'] = $unit3;
+            $data['unit_id3'] = Crypt::encrypt($unit3->id);
         }
         $unit = Unit::find($id);
 
@@ -171,10 +177,10 @@ class AntrianController extends Controller
                 $_queue = $q_res_antrian->get()->first();
             }
             $loket = Loket::with(['unit'])->find($request->l);
-            $channel_all = strtolower(implode('-', [str_replace(' ', '_', $loket->unit->unit_name), 'all']));
-            $channel_loket = strtolower(implode('-', [str_replace(' ', '_', $loket->unit->unit_name), str_replace(' ', '_', $loket->loket_name)]));
-            event(new SendMessage($channel_all, $loket->id, $_queue->antrian));
-            event(new SendMessage($channel_loket, $loket->id, $_queue->antrian));
+            $channel_all = "all-loket";
+            $channel_loket = str_replace(' ', '_', $loket->loket_name);
+            event(new SendMessage($channel_all, $loket->id,$_queue->unit_id, $_queue->antrian));
+            event(new SendMessage($channel_loket, $loket->id,$_queue->unit_id, $_queue->antrian));
             $data['status'] = true;
             $data['queue'] = $_queue;
         }
@@ -198,11 +204,11 @@ class AntrianController extends Controller
         ]);
         $antrian = Antrian::find($request->a_id);
         $loket = Loket::with(['unit'])->find($antrian->loket_id);
-        $channel_all = strtolower(implode('-', [str_replace(' ', '_', $loket->unit->unit_name), 'all']));
-        $channel_loket = strtolower(implode('-', [str_replace(' ', '_', $loket->unit->unit_name), str_replace(' ', '_', $loket->loket_name)]));
+        $channel_all = "all-loket";
+        $channel_loket = str_replace(' ', '_', $loket->loket_name);
 
-        event(new SendMessage($channel_all, $loket->id, $antrian->antrian));
-        event(new SendMessage($channel_loket, $loket->id, $antrian->antrian));
+        event(new SendMessage($channel_all, $loket->id,$antrian->unit_id, $antrian->antrian));
+        event(new SendMessage($channel_loket, $loket->id,$antrian->unit_id, $antrian->antrian));
     }
 
     public function updateStatus(Request $request)
@@ -219,31 +225,41 @@ class AntrianController extends Controller
     public function data(Request $request)
     {
         # code...
-        $antrian = Antrian::with(['unit','loket'])
-        ->where('created_at','like',$request->tanggal."%")
-        ->get()->all();
-        $data= DataTables::of($antrian)
-        ->editColumn('loket.loket_name',function(Antrian $antrian){
-            return $antrian->loket->loket_name ?? "";
-        })
-        ->editColumn('status',function(Antrian $antrian){
-            $status = "";
-            switch($antrian->status){
-                case 0 : $status= "Menunggu";break;
-                case 1 : $status= "Sedang Dilayani";break;
-                case 2 : $status= "Selesai";break;
-                case 3 : $status= "Tidak Hadir";break;
-                case 4 : $status= "Lewati";break;
-            }
-            return $status;
-        })
-        ->editColumn('created_at',function(Antrian $antrian){
-            return date('H:i:s',strtotime($antrian->created_at));
-        })
-        ->editColumn('updated_at',function(Antrian $antrian){
-            return $antrian->updated_at == $antrian->created_at ? "-":date('H:i:s',strtotime($antrian->created_at));
-        })
-        ->make();
+        $antrian = Antrian::with(['unit', 'loket'])
+            ->where('created_at', 'like', $request->tanggal . "%")
+            ->get()->all();
+        $data = DataTables::of($antrian)
+            ->editColumn('loket.loket_name', function (Antrian $antrian) {
+                return $antrian->loket->loket_name ?? "";
+            })
+            ->editColumn('status', function (Antrian $antrian) {
+                $status = "";
+                switch ($antrian->status) {
+                    case 0:
+                        $status = "Menunggu";
+                        break;
+                    case 1:
+                        $status = "Sedang Dilayani";
+                        break;
+                    case 2:
+                        $status = "Selesai";
+                        break;
+                    case 3:
+                        $status = "Tidak Hadir";
+                        break;
+                    case 4:
+                        $status = "Lewati";
+                        break;
+                }
+                return $status;
+            })
+            ->editColumn('created_at', function (Antrian $antrian) {
+                return date('H:i:s', strtotime($antrian->created_at));
+            })
+            ->editColumn('updated_at', function (Antrian $antrian) {
+                return $antrian->updated_at == $antrian->created_at ? "-" : date('H:i:s', strtotime($antrian->created_at));
+            })
+            ->make();
         return $data;
     }
 }
