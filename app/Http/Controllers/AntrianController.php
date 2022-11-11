@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NotifAntrian;
 use App\Events\SendMessage;
 use App\Models\Antrian;
 use App\Models\Loket;
@@ -17,7 +18,7 @@ class AntrianController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($id, $id2,$id3)
+    public function index($id, $id2, $id3)
     {
         //
         $id = Crypt::decrypt($id);
@@ -133,7 +134,7 @@ class AntrianController extends Controller
         $rest = Antrian::select("loket_id")->where('unit_id', $unit->id)
             ->where('created_at', 'like', date('Y-m-d') . "%")
             ->where('loket_id', "0")->get()->all();
-
+        event(new NotifAntrian());
         return response()->json([
             "antrian" => $antrian[0]->antrian,
             "date" => date('d/m/Y H:i:s', strtotime($antrian[0]->created_at)),
@@ -158,7 +159,8 @@ class AntrianController extends Controller
             ->where('created_at', 'like', date('Y-m-d') . "%")
             ->orderBy('antrian', 'asc');
 
-        $q_res_antrian = Antrian::where('loket_id', $request->l)
+        $q_res_antrian = Antrian::with(['unit'])
+            ->where('loket_id', $request->l)
             ->where('unit_id', $request->u)
             ->where('status', '1')
             ->where('created_at', 'like', date('Y-m-d') . "%");
@@ -179,8 +181,9 @@ class AntrianController extends Controller
             $loket = Loket::with(['unit'])->find($request->l);
             $channel_all = "all-loket";
             $channel_loket = str_replace(' ', '_', $loket->loket_name);
-            event(new SendMessage($channel_all, $loket->id,$_queue->unit_id, $_queue->antrian));
-            event(new SendMessage($channel_loket, $loket->id,$_queue->unit_id, $_queue->antrian));
+            event(new NotifAntrian());
+            event(new SendMessage($channel_all, $loket->id, $_queue->unit_id, $_queue->antrian));
+            event(new SendMessage($channel_loket, $loket->id, $_queue->unit_id, $_queue->antrian));
             $data['status'] = true;
             $data['queue'] = $_queue;
         }
@@ -207,8 +210,8 @@ class AntrianController extends Controller
         $channel_all = "all-loket";
         $channel_loket = str_replace(' ', '_', $loket->loket_name);
 
-        event(new SendMessage($channel_all, $loket->id,$antrian->unit_id, $antrian->antrian));
-        event(new SendMessage($channel_loket, $loket->id,$antrian->unit_id, $antrian->antrian));
+        event(new SendMessage($channel_all, $loket->id, $antrian->unit_id, $antrian->antrian));
+        event(new SendMessage($channel_loket, $loket->id, $antrian->unit_id, $antrian->antrian));
     }
 
     public function updateStatus(Request $request)

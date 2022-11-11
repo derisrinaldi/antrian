@@ -14,8 +14,28 @@
                         <div class="card-body text-center">
                             <div class="fw-bold" id="antrian" style="font-size:120px">
                                 {{ $antrian != null ? $antrian->antrian : '0' }}</div>
+                                <div class="fw-bold" id="antrian_unit" style="font-size:50px">
+                                    {{ $antrian != null ? $antrian->unit->unit_name:$loket->unit->unit_name }}
+                                </div>
                         </div>
                     </div>
+                </div>
+            </div>
+            <div class="card mt-2">
+                <div class="card-body">
+                    <div class="row" id="notif">
+                        @foreach ($notif as $n)
+                            <div class="col-sm-auto"><button type="button" class="btn btn-primary position-relative">
+                                    {{ $n->unit->unit_name }}
+                                    <span
+                                        class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                        {{ $n->jml_antrian }}
+                                        <span class="visually-hidden">unread messages</span>
+                                    </span>
+                                </button></div>
+                        @endforeach
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -110,8 +130,13 @@
             </div>
         </div>
     </div>
-
+   
     @push('script')
+        <script>
+            window.laravel_echo_port = '{{ env('LARAVEL_ECHO_PORT') }}';
+        </script>
+        <script src="//{{ Request::getHost() }}:{{ env('LARAVEL_ECHO_PORT') }}/socket.io/socket.io.js"></script>
+        <script src="{{ asset('js/laravel-echo-setup.js') }}" type="text/javascript"></script>
         <script>
             var antrian_id = "{{ $antrian != null ? $antrian->id : '0' }}";
 
@@ -119,7 +144,7 @@
                 var a = $("input[name='antrean']").val();
                 var u = $('#unit_id').val();
                 console.log(u);
-                var data = "l={{ $loket->id }}&a=" + a + "&u="+u;
+                var data = "l={{ $loket->id }}&a=" + a + "&u=" + u;
                 $.ajax({
                     url: '{{ route('antrian.next') }}',
                     type: "get",
@@ -133,6 +158,7 @@
                         if (data.status == true) {
                             $("#antrian").html(data.queue.antrian);
                             antrian_id = data.queue.id;
+                            $('#antrian_unit').html(data.queue.unit.unit_name)
                             $('#next').addClass('visually-hidden');
                             $('#ulang').removeClass('visually-hidden')
                             $('#status-group').removeClass('visually-hidden')
@@ -198,6 +224,14 @@
                     }
                 })
             }
+
+            $(() => {
+                window.Echo.channel('notif-antrian')
+                    .listen('.UserEvent', (data) => {
+                        console.log(data)
+                        $('#notif').html(data.notif);
+                    });
+            })
         </script>
     @endpush
 @endsection
