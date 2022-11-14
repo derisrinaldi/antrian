@@ -76,6 +76,9 @@ class LoketController extends Controller
     public function edit(Loket $loket)
     {
         //
+        $unit = Unit::all();
+        $data =['unit'=>$unit,'loket'=>$loket];
+        return view('pages.loket.edit',$data);
     }
 
     /**
@@ -88,6 +91,15 @@ class LoketController extends Controller
     public function update(Request $request, Loket $loket)
     {
         //
+        $validate = $request->validate([
+            'unit_id'=>'required',
+            'loket_name'=>'required'
+        ]);
+
+        Loket::where('id',$loket->id)
+        ->update($validate);
+
+        return redirect(route('loket.index'))->with('success','data berhasil di update');
     }
 
     /**
@@ -108,6 +120,8 @@ class LoketController extends Controller
         $loket = Loket::with(['unit'=>function($q){
             $q->select('id',"unit_name");
         }])->get()->all();
-        return DataTables::of($loket)->make();
+        return DataTables::of($loket)->addColumn('action', function (Loket $loket) {
+            return '<a href="' . route('loket.edit', $loket->id) . '" class="btn btn-warning"><i class="bi bi-pencil-square"></i></a>';
+        })->make();
     }
 }

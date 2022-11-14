@@ -14,7 +14,7 @@ class MenuController extends Controller
     {
         # code...
         $unit = Unit::all();
-        $loket = Loket::all();
+        $loket = Loket::with(['unit'])->get()->all();
        
         $data =[
             'unit'=>$unit,

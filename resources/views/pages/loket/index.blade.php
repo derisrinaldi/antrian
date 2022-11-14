@@ -18,6 +18,7 @@
                         <tr>
                             <th> Loket</th>
                             <th> Unit</th>
+                            <th> Unit</th>
                         </tr>
                     </thead>
 
@@ -40,6 +41,10 @@
                     {
                         data: 'unit.unit_name',
                         name: 'unit.unit_name'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action'
                     },
                 ],
                 // initComplete: function() {
@@ -95,7 +100,9 @@
 
             $(() => {
                 table;
-
+                @if (session()->has('success'))
+                    Swal.fire('{{ session('success') }}', '', 'success');
+                @endif
             })
         </script>
     @endpush

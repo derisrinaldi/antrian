@@ -78,7 +78,7 @@
                         <div class="form-group  visually-hidden" id="form2">
                             <select name="" id="caller" class="form-select mb-2">
                                 @foreach ($loket as $l)
-                                    <option value="{{ $l->id }}">{{ $l->loket_name }}</option>
+                                    <option value="{{ $l->id }}">{{ $l->loket_name }} ({{ $l->unit->unit_name }})</option>
                                 @endforeach
                             </select>
                             <button class="btn btn-danger" onclick="openCaller()">Open</button>
