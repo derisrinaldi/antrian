@@ -39,4 +39,4 @@ window.$ = require('jquery');
 window.Swal = require('sweetalert2');
 
 // datatable
-window.dt = require('datatables.net');
+window.dt = require('datatables.net-bs5');
