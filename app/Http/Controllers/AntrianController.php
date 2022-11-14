@@ -260,7 +260,7 @@ class AntrianController extends Controller
                 return date('H:i:s', strtotime($antrian->created_at));
             })
             ->editColumn('updated_at', function (Antrian $antrian) {
-                return $antrian->updated_at == $antrian->created_at ? "-" : date('H:i:s', strtotime($antrian->created_at));
+                return $antrian->updated_at == $antrian->created_at ? "-" : date('H:i:s', strtotime($antrian->updated_at));
             })
             ->make();
         return $data;
