@@ -35,7 +35,7 @@ class LoketController extends Controller
     {
         //
         $unit =Unit::all();
-        return view('pages.loket.create',['unit'=>$unit]);
+        return view('pages.loket.create',['unit'=>$unit,'title'=>'Create Loket']);
     }
 
     /**
@@ -77,7 +77,7 @@ class LoketController extends Controller
     {
         //
         $unit = Unit::all();
-        $data =['unit'=>$unit,'loket'=>$loket];
+        $data =['unit'=>$unit,'loket'=>$loket,'title'=>'Update Loket'];
         return view('pages.loket.edit',$data);
     }
 

@@ -68,7 +68,7 @@ class UnitController extends Controller
     public function edit(Unit $unit)
     {
         //
-        return view('pages.unit.edit', ['unit' => $unit]);
+        return view('pages.unit.edit', ['unit' => $unit,'title'=>'Update Unit']);
     }
 
     /**
