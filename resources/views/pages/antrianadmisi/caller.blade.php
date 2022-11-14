@@ -1,6 +1,11 @@
 @extends('layouts.caller.app')
 
 @section('container')
+    <div class="row d-flex justify-content-end">
+        <div class="col-auto">
+                
+        </div>
+    </div>
     <div class="row">
         <div class="col-lg-8">
             <div class="card">
@@ -14,9 +19,9 @@
                         <div class="card-body text-center">
                             <div class="fw-bold" id="antrian" style="font-size:120px">
                                 {{ $antrian != null ? $antrian->antrian : '0' }}</div>
-                                <div class="fw-bold" id="antrian_unit" style="font-size:50px">
-                                    {{ $antrian != null ? $antrian->unit->unit_name:$loket->unit->unit_name }}
-                                </div>
+                            <div class="fw-bold" id="antrian_unit" style="font-size:50px">
+                                {{ $antrian != null ? $antrian->unit->unit_name : $loket->unit->unit_name }}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -130,7 +135,7 @@
             </div>
         </div>
     </div>
-   
+
     @push('script')
         <script>
             window.laravel_echo_port = '{{ env('LARAVEL_ECHO_PORT') }}';
@@ -225,12 +230,24 @@
                 })
             }
 
+            var timeDisplay = $('#time');
+
+            function refreshTime() {
+                var dateString = new Date().toLocaleString("id-ID", {
+                    timeZone: "Asia/Jakarta"
+                });
+                var formattedString = dateString.replace(", ", " - ");
+                timeDisplay.html(formattedString.replace(' ',' at '));
+                // console.log(formattedString)
+            }
+
             $(() => {
                 window.Echo.channel('notif-antrian')
                     .listen('.UserEvent', (data) => {
                         console.log(data)
                         $('#notif').html(data.notif);
                     });
+                setInterval(refreshTime, 1000);
             })
         </script>
     @endpush

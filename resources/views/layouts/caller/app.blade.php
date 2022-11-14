@@ -55,7 +55,7 @@
 
     <nav class="navbar navbar-expand-md navbar-light fixed-top bg-light"
         style="z-index: 1025;box-shadow: 0px 0px 1px 0px #8a8a8a">
-        <div class="container-fluid">
+        <div class="container-fluid p-1">
             <div class="col-lg-3">
                 <img src="{{ asset('images/logo.png') }}" alt="" width="40" height="40">
             </div>
@@ -66,7 +66,8 @@
             </div>
             <div class="col-lg-3">
                 <div class="text-end">
-                    <i class="bi bi-bug-fill"></i></div>
+                    <h3 id="time"></h3>
+                </div>
             </div>
 
         </div>
