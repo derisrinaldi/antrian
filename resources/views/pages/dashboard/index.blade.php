@@ -50,8 +50,7 @@
             ordering: false,
             destroy:true,
             ajax: {
-                url:'{{ route('antrian.data') }}',
-                data:{tanggal:$('#cal').val()}
+                url:'{{ route('antrian.data') }}'
             },
             columns: [
                 {
@@ -145,110 +144,13 @@
             }
         });
         $(() => {
-            table
+            var tgl = $('#cal').val()
+            table.ajax.url('{{ route('antrian.data') }}?tanggal='+$('#cal').val()).load()
         })
 
         function cari(){
-            $('#table').DataTable({
-            processing: true,
-            serverSide: true,
-            ordering: false,
-            destroy:true,
-            ajax: {
-                url:'{{ route('antrian.data') }}',
-                data:{tanggal:$('#cal').val()}
-            },
-            columns: [
-                {
-                    data: 'unit.unit_name',
-                    name: 'unit_id'
-                },
-                {
-                    data: 'loket.loket_name',
-                    name: 'loket.loket_name'
-                },
-                {
-                    data: 'antrian',
-                    name: 'antrian'
-                },
-                {
-                    data: 'created_at',
-                    name: 'created_at'
-                },
-                {
-                    data: 'updated_at',
-                    name: 'updated_at'
-                },
-                {
-                    data: 'status',
-                    name: 'status'
-                },
-            ],
-            initComplete: function() {
-                this.api().column(0).each(function() {
-                    var column = this;
-                    $(column.header()).empty();
-                    $("<select class=form-select><option value=''>Semua</option>@foreach($unit as $u)<option value={{ $u->id }}>{{ $u->unit_name }}</option>@endforeach</select>").appendTo(
-                            $(column.header()))
-                        .on('change', function() {
-                            var val = $.fn.dataTable.util.escapeRegex($(this).val());
-
-                            column.search(val ? '^' + val + '$' : '', true, false).draw();
-                        });
-                });
-                this.api().column(1).each(function() {
-                    var column = this;
-                    $(column.header()).empty();
-                    var input = document.createElement('input');
-                    $("<input class=form-control>").appendTo($(column.header()))
-                        .on('keyup change clear', function() {
-                            var val = $.fn.dataTable.util.escapeRegex($(this).val());
-
-                            column.search(val ? val : '', true, false).draw();
-                        });
-                });
-                this.api().column(2).each(function() {
-                    var column = this;
-                    $(column.header()).empty();
-                    var input = document.createElement('input');
-                    $("<input class=form-control>").appendTo($(column.header()))
-                        .on('keyup change clear', function() {
-                            var val = $.fn.dataTable.util.escapeRegex($(this).val());
-
-                            column.search(val ? val : '', true, false).draw();
-                        });
-                });
-                this.api().column(3).each(function() {
-                    var column = this;
-                    $(column.header()).empty();
-                    var input = document.createElement('input');
-                    $("<input class=form-control>").appendTo($(column.header()))
-                        .on('keyup change clear', function() {
-                            var val = $.fn.dataTable.util.escapeRegex($(this).val());
-
-                            column.search(val ? val : '', true, false).draw();
-                        });
-                });
-                this.api().column(5).each(function() {
-                    var column = this;
-                    $(column.header()).empty();
-                    var text = "<select class=form-select>"+
-                                "<option value='' selected>Semua</option>"+
-                                "<option value='Menunggu'>Menunggu</option>"+
-                                "<option value='Sedang Dilayani'>Sedang Dilayani </option>"+
-                                "<option value='Selesai'>Selesai </option>"+
-                                "<option value='Tidak Hadir'>Tidak Hadir </option>"+
-                                "<option value='Lewati'>Lewati </option>"+
-                                "</select>";
-                    $(text).appendTo($(column.header()))
-                        .on('change', function() {
-                            var val = $.fn.dataTable.util.escapeRegex($(this).val());
-                            column.search(val ? '^' + val + '$' : '', true, false).draw();
-                        });
-                });
-
-            }
-        });
+            var tgl = $('#cal').val()
+            table.ajax.url('{{ route('antrian.data') }}?tanggal='+$('#cal').val()).load()
         }
     </script>
 @endpush
