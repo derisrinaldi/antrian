@@ -135,7 +135,7 @@
                     newWin.document.body.innerHTML = '';
                     newWin.document.write(
                         '<center>' +
-                        '<h4>RS PERMATA KUNIGAN</h4>' +
+                        '<h4>{{ env("APP_NAME") }}</h4>' +
                         '<p style="font-size: 12px">' + response.date + '</p>' +
                         '<span style="display: inline-block;width: 50%;border-top: 2px solid black;"></span>' +
                         '<h1 style="font-size: 46px">' + response.antrian + '</h1>' +
