@@ -51,7 +51,8 @@
             </div>
             <div class="col-lg-3">
                 <div class="text-end">
-                    <i class="bi bi-bug-fill"></i></div>
+                    <i class="bi bi-bug-fill"></i>
+                </div>
             </div>
 
         </div>
@@ -60,33 +61,40 @@
     <main class="container-fluid">
         <div class="row">
             <div class="col-lg-12">
-                <div class="card" style="border-radius: 0px;box-shadow:5px 5px 5px #888888">
-                    <div class="card-header" style="background-color: #1abc9c;border-radius: 0px">
-                        <div class="text-center fw-bold fs-2 text-uppercase text-light">
-                            Antrian dipanggil
+                <div class="row">
+
+                    <div class="col-lg-6">
+                        <div class="card" style="border-radius: 0px;box-shadow:5px 5px 5px #888888">
+                            <div class="card-header" style="background-color: #1abc9c;border-radius: 0px">
+                                <div class="text-center fw-bold fs-2 text-uppercase text-light">
+                                    Antrian dipanggil
+                                </div>
+                            </div>
+                            <div class="card-body text-center">
+                                <div class="fw-bold" id="antrian" style="font-size:120px">0</div>
+                                <div class="fw-bold mt-2" id="loket" style="font-size: 50px; line-height: 0.8;">
+                                    {{ is_array($loket) ? '' : $loket->loket_name }}
+                                </div>
+                                <hr style="border-color: #1ABC9C;">
+                                <div class="text-uppercase" style="font-size: 30px; margin-top: 0px; line-height: 0.8;">
+                                    antrian
+                                    <span id="unit">{{ is_array($unit) ? '' : $unit->unit_name }}</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="card-body text-center">
-                        <div class="fw-bold" id="antrian" style="font-size:120px">0</div>
-                        <div class="fw-bold mt-2" id="loket" style="font-size: 50px; line-height: 0.8;">
-                            {{ is_array($loket) ? '':$loket->loket_name }}
+
+                    <div class="col-lg-6">
+                        <div class="embed-responsive embed-responsive-16by9" >
+                            <video width="602.083" height="345.75" class="embed-responsive-item" controls loop onloadstart="this.volume=0">
+                                <source src="{{ asset('/video/video.mp4') }}" type="video/mp4">
+                                Your browser does not support HTML video.
+                            </video>
                         </div>
-                        <hr style="border-color: #1ABC9C;">
-                        <div class="text-uppercase" style="font-size: 30px; margin-top: 0px; line-height: 0.8;">antrian
-                            <span id="unit">{{ is_array($unit) ? '':$unit->unit_name }}</span></div>
                     </div>
                 </div>
             </div>
-            {{-- <div class="col-lg-6">
-                <div class="card">
-                    <div class="ratio ratio-16x9">
-                        {{-- <object data="http://www.youtube.com/v/R_FfqwidEFM" type="application/x-shockwave-flash">
-                            <param name="src" value="http://www.youtube.com/v/R_FfqwidEFM" />
-                        </object>   
-                    </div>
 
-                </div>
-            </div> --}}
         </div>
     </main>
 
@@ -110,7 +118,8 @@
                     src: ['{{ asset('audio/airport.mp3') }}'],
                     volume: 0.7,
                     onend: function() {
-                        responsiveVoice.speak("Antrian, " + data.antrian + ", " + data.unit + ", ke, "+data.loket,
+                        responsiveVoice.speak("Antrian, " + data.antrian + ", " + data.unit + ", ke, " +
+                            data.loket,
                             "Indonesian Male", {
                                 pitch: 1,
                                 rate: 0.8
