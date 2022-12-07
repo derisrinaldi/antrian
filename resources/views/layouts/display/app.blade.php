@@ -15,8 +15,8 @@
     <style>
         /* Show it is fixed to the top */
         body {
-            min-height: 75rem;
-            padding-top: 4.5rem;
+            /* min-height: 75rem; */
+            /* padding-top: 4.5rem; */
         }
 
         .bd-placeholder-img {
@@ -36,9 +36,9 @@
     @stack('style')
 </head>
 
-<body>
+<body class="d-flex flex-column min-vh-100">
 
-    <nav class="navbar navbar-expand-md navbar-light fixed-top bg-light"
+    <nav class="navbar navbar-expand-md navbar-light bg-light"
         style="z-index: 1025;box-shadow: 0px 0px 1px 0px #8a8a8a">
         <div class="container-fluid">
             <div class="col-lg-3">
@@ -54,11 +54,10 @@
                     <i class="bi bi-bug-fill"></i>
                 </div>
             </div>
-
-        </div>
+        </div>        
     </nav>
 
-    <main class="container-fluid">
+    <main class="container-fluid mt-3">
         <div class="row">
             <div class="col-lg-12">
                 <div class="row">
@@ -85,8 +84,9 @@
                     </div>
 
                     <div class="col-lg-6">
-                        <div class="embed-responsive embed-responsive-16by9" >
-                            <video width="602.083" height="345.75" class="embed-responsive-item" controls loop onloadstart="this.volume=0">
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <video width="602.083" height="345.75" class="embed-responsive-item" controls loop
+                                onloadstart="this.volume=0">
                                 <source src="{{ asset('/video/video.mp4') }}" type="video/mp4">
                                 Your browser does not support HTML video.
                             </video>
@@ -96,8 +96,15 @@
             </div>
 
         </div>
+    
     </main>
-
+    <footer class="mt-auto container-fluid">
+        <div class="row">
+            <div class="col-lg-12 bg-success text-light marquee">
+            </div>
+        </div>
+    </footer>
+    
     <script src="{{ asset('js/app.js') }}"></script>
     <script>
         window.laravel_echo_port = '{{ env('LARAVEL_ECHO_PORT') }}';
@@ -106,7 +113,6 @@
     <script src="{{ asset('js/laravel-echo-setup.js') }}" type="text/javascript"></script>
     <script src="https://code.responsivevoice.org/responsivevoice.js?key=GquJ1oQq"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.1.1/howler.min.js"></script>
-    <script></script>
     <script type="text/javascript">
         window.Echo.channel('{{ $channel }}')
             .listen('.UserEvent', (data) => {
@@ -128,6 +134,37 @@
                 });
                 sound.play()
             });
+    </script>
+    <script>
+        $(()=>{
+            
+            var years ={{ date('Y') }}
+            var month = {{ date('m') }}
+            $.ajax({
+                url:"https://cdn.statically.io/gh/lakuapik/jadwalsholatorg/master/adzan/kuningan/"+years+"/"+month+".json",
+                type:"get",
+                dataType:'json',
+                success:function(data){
+                    var index = {{ date('d') - 1 }};
+                    if(data[index] !== undefined){
+                        var jadwal = data[index];
+                        var text = "Jadwal Solat Hari ini : ";
+                        text +="imsyak : "+jadwal.imsyak+", ";
+                        text +="shubuh : "+jadwal.shubuh+", ";
+                        text +="terbit : "+jadwal.terbit+", ";
+                        text +="dhuha : "+jadwal.dhuha+", ";
+                        text +="dzuhur : "+jadwal.dzuhur+", ";
+                        text +="ashr : "+jadwal.ashr+", ";
+                        text +="magrib : "+jadwal.magrib+", ";
+                        text +="isya : "+jadwal.isya+", ";
+                        var text_run = '<marquee behavior="scroll" class="p-1" scrollamount="3" direction="left">'+text+'</marquee>';
+                        $(".marquee").html(text_run);
+                    }
+
+                    console.log(data[index])
+                }
+            })
+        })
     </script>
     @stack('script')
 
