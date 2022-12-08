@@ -51,10 +51,10 @@
             </div>
             <div class="col-lg-3">
                 <div class="text-end">
-                    <i class="bi bi-bug-fill"></i>
+                    <h3 id="time"></h3>
                 </div>
             </div>
-        </div>        
+        </div>
     </nav>
 
     <main class="container-fluid mt-3">
@@ -96,7 +96,7 @@
             </div>
 
         </div>
-    
+
     </main>
     <footer class="mt-auto container-fluid" style="background-color: #1abc9c">
         <div class="row">
@@ -104,7 +104,7 @@
             </div>
         </div>
     </footer>
-    
+
     <script src="{{ asset('js/app.js') }}"></script>
     <script>
         window.laravel_echo_port = '{{ env('LARAVEL_ECHO_PORT') }}';
@@ -136,28 +136,42 @@
             });
     </script>
     <script>
-        $(()=>{
-            
-            var years ={{ date('Y') }}
+        var timeDisplay = $('#time');
+
+        function refreshTime() {
+            var dateString = new Date().toLocaleString("id-ID", {
+                timeZone: "Asia/Jakarta"
+            });
+            var formattedString = dateString.replace(", ", " - ");
+            timeDisplay.html(formattedString.replace(' ', ' at '));
+            // console.log(formattedString)
+        }
+        $(() => {
+            setInterval(refreshTime, 1000);
+
+            var years = {{ date('Y') }}
             var month = {{ date('m') }}
             $.ajax({
-                url:"https://cdn.statically.io/gh/lakuapik/jadwalsholatorg/master/adzan/kuningan/"+years+"/"+month+".json",
-                type:"get",
-                dataType:'json',
-                success:function(data){
+                url: "https://cdn.statically.io/gh/lakuapik/jadwalsholatorg/master/adzan/kuningan/" +
+                    years + "/" + month + ".json",
+                type: "get",
+                dataType: 'json',
+                success: function(data) {
                     var index = {{ date('d') - 1 }};
-                    if(data[index] !== undefined){
+                    if (data[index] !== undefined) {
                         var jadwal = data[index];
                         var text = "Jadwal Solat Hari ini : ";
-                        text +="imsyak : "+jadwal.imsyak+", ";
-                        text +="shubuh : "+jadwal.shubuh+", ";
-                        text +="terbit : "+jadwal.terbit+", ";
-                        text +="dhuha : "+jadwal.dhuha+", ";
-                        text +="dzuhur : "+jadwal.dzuhur+", ";
-                        text +="ashr : "+jadwal.ashr+", ";
-                        text +="magrib : "+jadwal.magrib+", ";
-                        text +="isya : "+jadwal.isya+", ";
-                        var text_run = '<marquee behavior="scroll" class="pt-1 pb-1" scrollamount="3" direction="left">'+text+'</marquee>';
+                        text += "imsyak : " + jadwal.imsyak + ", ";
+                        text += "shubuh : " + jadwal.shubuh + ", ";
+                        text += "terbit : " + jadwal.terbit + ", ";
+                        text += "dhuha : " + jadwal.dhuha + ", ";
+                        text += "dzuhur : " + jadwal.dzuhur + ", ";
+                        text += "ashr : " + jadwal.ashr + ", ";
+                        text += "magrib : " + jadwal.magrib + ", ";
+                        text += "isya : " + jadwal.isya + ", ";
+                        var text_run =
+                            '<marquee behavior="scroll" class="pt-1 pb-1" scrollamount="3" direction="left">' +
+                            text + '</marquee>';
                         $(".marquee").html(text_run);
                     }
 
