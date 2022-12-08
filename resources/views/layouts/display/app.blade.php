@@ -85,7 +85,7 @@
 
                     <div class="col-lg-6">
                         <div class="embed-responsive embed-responsive-16by9">
-                            <video width="602.083" height="345.75" class="embed-responsive-item" controls loop
+                            <video width="100%" height="345.75" class="embed-responsive-item" controls loop
                                 onloadstart="this.volume=0">
                                 <source src="{{ asset('/video/video.mp4') }}" type="video/mp4">
                                 Your browser does not support HTML video.
@@ -98,9 +98,9 @@
         </div>
     
     </main>
-    <footer class="mt-auto container-fluid">
+    <footer class="mt-auto container-fluid" style="background-color: #1abc9c">
         <div class="row">
-            <div class="col-lg-12 bg-success text-light marquee">
+            <div class="col-lg-12  text-light marquee">
             </div>
         </div>
     </footer>
@@ -157,7 +157,7 @@
                         text +="ashr : "+jadwal.ashr+", ";
                         text +="magrib : "+jadwal.magrib+", ";
                         text +="isya : "+jadwal.isya+", ";
-                        var text_run = '<marquee behavior="scroll" class="p-1" scrollamount="3" direction="left">'+text+'</marquee>';
+                        var text_run = '<marquee behavior="scroll" class="pt-1 pb-1" scrollamount="3" direction="left">'+text+'</marquee>';
                         $(".marquee").html(text_run);
                     }
 
