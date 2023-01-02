@@ -149,8 +149,8 @@
         $(() => {
             setInterval(refreshTime, 1000);
 
-            var years = {{ date('Y') }}
-            var month = {{ date('m') }}
+            var years = "{{ date('Y') }}"
+            var month = "{{ date('m') }}"
             $.ajax({
                 url: "https://cdn.statically.io/gh/lakuapik/jadwalsholatorg/master/adzan/kuningan/" +
                     years + "/" + month + ".json",
