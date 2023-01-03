@@ -11,6 +11,7 @@ class ChartController extends Controller
     //
     function index(Request $request){
         $tanggal = $request->tanggal ?? date('Y-m-d');
+        $_05 = Antrian::where('created_at', 'like', $tanggal . " 05:%")->count();
         $_06 = Antrian::where('created_at', 'like', $tanggal . " 06:%")->count();
         $_07 = Antrian::where('created_at', 'like', $tanggal . " 07:%")->count();
         $_08 = Antrian::where('created_at', 'like', $tanggal . " 08:%")->count();
@@ -30,6 +31,7 @@ class ChartController extends Controller
     
         $chart = new SampleChart;
         $chart->labels([
+            "Jam 05",
             "Jam 06",
             "Jam 07",
             "Jam 08",
@@ -48,6 +50,7 @@ class ChartController extends Controller
             "Jam 21",
         ]);
         $chart->dataset('antrian', 'line', [
+            $_05,
             $_06,
             $_07,
             $_08,
