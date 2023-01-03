@@ -24,6 +24,12 @@
                 </a>
             </li>
             <li class="nav-item">
+                <a class="nav-link {{ Route::is('chart*') ? 'active':'' }}" href="{{ url('dashboard/chart') }}">
+                    <i class="bi bi-graph-up"></i>
+                    chart
+                </a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="{{ route('setting.index') }}">
                     <i class="bi bi-camera-video-fill"></i>
                     Setting
