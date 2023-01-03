@@ -10,6 +10,7 @@ class Antrian extends Model
     use HasFactory;
 
     protected $guarded =['id'];
+    protected $with=['unit','loket'];
 
     public function unit()
     {

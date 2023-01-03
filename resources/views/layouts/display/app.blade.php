@@ -70,7 +70,7 @@
                                 </div>
                             </div>
                             <div class="card-body text-center">
-                                <div class="fw-bold" id="antrian" style="font-size:120px">0</div>
+                                <div class="fw-bold" id="antrian" style="font-size:120px">{{ $antrian ?? "0" }}</div>
                                 <div class="fw-bold mt-2" id="loket" style="font-size: 50px; line-height: 0.8;">
                                     {{ is_array($loket) ? '' : $loket->loket_name }}
                                 </div>
