@@ -1,5 +1,15 @@
-# antrian
-Antrian Berbasis Web 
+# Selamat Datang di Aplikasi Antrian Berbasis Web
+
+Aplikasi antrian berbasis web ini dibuat dengan menggunakan framework Laravel, sebuah framework PHP yang populer dan berkualitas tinggi.
+
+Dengan aplikasi ini, Anda dapat dengan mudah mengelola antrian Anda secara online. Anda dapat menambahkan, mengedit, atau menghapus antrian sesuai kebutuhan Anda.
+
+Aplikasi ini juga dilengkapi dengan fitur-fitur yang berguna, seperti pemberitahuan SMS dan email untuk memberi tahu Anda saat antrian Anda sudah tiba, serta laporan antrian yang memudahkan Anda untuk melacak kemajuan antrian Anda.
+
+Jika Anda tertarik untuk mencoba aplikasi ini, silakan kunjungi [Antrian](https://gitlab.com/itrspk/antrian) untuk mendownload aplikasi ini.
+
+Kami yakin aplikasi antrian berbasis web ini akan membantu Anda dalam mengelola antrian dengan lebih efisien dan efektif. Terima kasih telah mencoba aplikasi kami!
+
 
 ## Getting started
 
