@@ -7,6 +7,7 @@ use App\Events\SendMessage;
 use App\Models\Antrian;
 use App\Models\Loket;
 use App\Models\Unit;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Yajra\DataTables\Facades\DataTables;
@@ -122,10 +123,10 @@ class AntrianController extends Controller
         }])->get()->all();
         $count =  count($antrian);
         if ($count == 0) {
-            Antrian::create(['antrian' => 1, "unit_id" => $unit->id]);
+            Antrian::create(['antrian' => 1, "unit_id" => $unit->id,'queue_date'=>Carbon::now()->toDateString()]);
         } else {
             $num = $antrian[0]->antrian + 1;
-            Antrian::create(['antrian' => $num, "unit_id" => $unit->id]);
+            Antrian::create(['antrian' => $num, "unit_id" => $unit->id,'queue_date'=>Carbon::now()->toDateString()]);
         }
 
         $antrian = $query->with(['unit' => function ($q) {
