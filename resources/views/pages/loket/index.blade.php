@@ -18,7 +18,8 @@
                         <tr>
                             <th> Loket</th>
                             <th> Unit</th>
-                            <th> Unit</th>
+                            <th>Default Jenis Antrian</th>
+                            <th> Action</th>
                         </tr>
                     </thead>
 
@@ -41,6 +42,10 @@
                     {
                         data: 'unit.unit_name',
                         name: 'unit.unit_name'
+                    },
+                    {
+                        data: 'queue_type.name',
+                        name: 'queue_type.name'
                     },
                     {
                         data: 'action',

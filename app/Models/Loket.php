@@ -23,4 +23,10 @@ class Loket extends Model
         # code...
         return $this->hasMany(Antrian::class);
     }
+
+    public function queueType()
+    {
+        # code...
+        return $this->hasOne(QueueType::class,'id','queue_type_id');
+    }
 }

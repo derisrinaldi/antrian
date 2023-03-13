@@ -24,7 +24,7 @@
 		"redis": true
 	},
 	"apiOriginAllow": {
-		"allowCors": true,
+		"allowCors": false,
 		"allowOrigin": "",
 		"allowMethods": "",
 		"allowHeaders": ""

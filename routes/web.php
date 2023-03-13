@@ -7,6 +7,7 @@ use App\Http\Controllers\ChartController;
 use App\Http\Controllers\DisplayController;
 use App\Http\Controllers\LoketController;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\QueueTypeController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\UnitController;
 use App\Models\Loket;
@@ -54,4 +55,14 @@ Route::get('/', [MenuController::class, 'index']);
 Route::resource('/dashboard/unit', UnitController::class);
 Route::get('/dashboard/setting', [SettingController::class, 'index'])->name('setting.index');
 
-Route::get('/dashboard/chart',[ChartController::class,'index']);
+Route::get('/dashboard/chart', [ChartController::class, 'index']);
+
+Route::resource('/dashboard/jenis-antrian', QueueTypeController::class)->parameters([
+    'jenis-antrian' => 'queueType'
+]);
+
+Route::controller(QueueTypeController::class)->group(function(){
+    Route::get('/dashboard/datatable/jenis-antrian', 'getDatatableJson')->name('jenis-antrian.datatable');
+    Route::get('/dashboard/data-json/jenis-antrian','dataJson')->name('jenis-antrian.dataJson');
+
+});

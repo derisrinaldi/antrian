@@ -18,6 +18,12 @@
                 </a>
             </li>
             <li class="nav-item">
+                <a class="nav-link {{ Route::is('jenis-antrian*') ? 'active':'' }}" href="{{ route('jenis-antrian.index') }}">
+                    <i class="bi bi-hdd-rack-fill"></i>
+                    Jenis Antrian
+                </a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link {{ Route::is('loket*') ? 'active':'' }}" href="{{ route('loket.index') }}">
                     <i class="bi bi-hdd-rack-fill"></i>
                     Loket

@@ -20,10 +20,7 @@ class LoketController extends Controller
         //
         
         $unit = Unit::all();
-        return view('pages.loket.index',[
-            'title'=>'Loket',
-            'unit'=>$unit,
-        ]);
+        return view('pages.loket.index');
     }
 
     /**
@@ -49,7 +46,8 @@ class LoketController extends Controller
         //
         $validate = $request->validate([
             'unit_id'=>'required',
-            'loket_name'=>'required'
+            'loket_name'=>'required',
+            'queue_type_id'=>'required',
         ]);
 
         Loket::create($validate);
@@ -119,7 +117,7 @@ class LoketController extends Controller
         # code...
         $loket = Loket::with(['unit'=>function($q){
             $q->select('id',"unit_name");
-        }])->get()->all();
+        },'queueType'])->get()->all();
         return DataTables::of($loket)->addColumn('action', function (Loket $loket) {
             return '<a href="' . route('loket.edit', $loket->id) . '" class="btn btn-warning"><i class="bi bi-pencil-square"></i></a>';
         })->make();
