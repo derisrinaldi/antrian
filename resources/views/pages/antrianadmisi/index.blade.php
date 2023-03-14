@@ -60,11 +60,11 @@
                 <div class="row">
                     <div class="col d-flex justify-content-center mb-4">
                         <div>
-                            <h1>PENDAFTARAN <br>  {{ $unit->unit_name }}</h1>
+                            <h1>PENDAFTARAN <br>  {{ $queue_type->name }}</h1>
                             <h5 style="margin-top:10px;margin-bottom:10px;font-size:14px;">Silahkan ambil nomor antrian
                                 dibawah
                             </h5>
-                            <button onclick="ant('{{ $unit_id }}')"
+                            <button onclick="ant('{{ $queue_type_id }}')"
                                 class="block card bg-warning my-btn text-decoration-none text-center text-white">
 
                                 <i class="bi bi-chevron-down"></i>
@@ -74,15 +74,15 @@
                         </div>
 
                     </div>
-                    @if (isset($unit2))
+                    @if (isset($queue_type2))
                         <div class="col d-flex justify-content-center mb-4">
                             <div>
-                                <h1>PENDAFTARAN <br>  {{ $unit2->unit_name }}</h1>
+                                <h1>PENDAFTARAN <br>  {{ $queue_type2->name }}</h1>
                                 <h5 style="margin-top:10px;margin-bottom:10px;font-size:14px;">Silahkan ambil nomor
                                     antrian
                                     dibawah
                                 </h5>
-                                <button onclick="ant('{{ $unit_id2 }}')"
+                                <button onclick="ant('{{ $queue_type_id2 }}')"
                                     class="block card bg-success my-btn text-decoration-none text-center text-white">
 
                                     <i class="bi bi-chevron-down"></i>
@@ -93,15 +93,15 @@
                             </div>
                         </div>
                     @endif
-                    @if (isset($unit3))
+                    @if (isset($queue_type3))
                         <div class="col d-flex justify-content-center mb-4">
                             <div>
-                                <h1>PENDAFTARAN <br>  {{ $unit3->unit_name }}</h1>
+                                <h1>PENDAFTARAN <br>  {{ $queue_type3->name }}</h1>
                                 <h5 style="margin-top:10px;margin-bottom:10px;font-size:14px;">Silahkan ambil nomor
                                     antrian
                                     dibawah
                                 </h5>
-                                <button onclick="ant('{{ $unit_id3 }}')"
+                                <button onclick="ant('{{ $queue_type_id3 }}')"
                                     class="block card bg-danger my-btn text-decoration-none text-center text-white">
 
                                     <i class="bi bi-chevron-down"></i>
@@ -124,10 +124,10 @@
     {{-- Bootrap core js --}}
     <script src="{{ asset('js/app.js') }}"></script>
     <script>
-        function ant(unit_id) {
+        function ant(queue_type_id) {
             $.ajax({
                 type: "GET",
-                url: "/antrian/" + unit_id,
+                url: "/antrian/" + queue_type_id,
                 dataType: 'json',
                 success: function(response) {
 
@@ -139,7 +139,7 @@
                         '<p style="font-size: 12px">' + response.date + '</p>' +
                         '<span style="display: inline-block;width: 50%;border-top: 2px solid black;"></span>' +
                         '<h1 style="font-size: 46px">' + response.antrian + '</h1>' +
-                        '<h6>' + response.unit + '</h6>' +
+                        '<h6>' + response.queue_type + '</h6>' +
                         '<span style="display: inline-block;width: 50%;border-top: 2px solid black;"></span>' +
                         '<p>Sisa Antrean : ' + response.rest + '</p>' +
                         '<p style="font-size: 8px">*) Silahkan mengambil nomor antrian baru,<br>jika nomor antrian terlewatkan</p>' +

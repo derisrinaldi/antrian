@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Loket;
+use App\Models\QueueType;
 use App\Models\Unit;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables as DataTablesDataTables;
@@ -18,8 +19,6 @@ class LoketController extends Controller
     public function index()
     {
         //
-        
-        $unit = Unit::all();
         return view('pages.loket.index');
     }
 
@@ -31,8 +30,8 @@ class LoketController extends Controller
     public function create()
     {
         //
-        $unit =Unit::all();
-        return view('pages.loket.create',['unit'=>$unit,'title'=>'Create Loket']);
+        $unit = Unit::all();
+        return view('pages.loket.create', ['unit' => $unit, 'title' => 'Create Loket']);
     }
 
     /**
@@ -45,13 +44,13 @@ class LoketController extends Controller
     {
         //
         $validate = $request->validate([
-            'unit_id'=>'required',
-            'loket_name'=>'required',
-            'queue_type_id'=>'required',
+            'unit_id' => 'required',
+            'loket_name' => 'required',
+            'queue_type_id' => 'required',
         ]);
 
         Loket::create($validate);
-        return back()->with('success','Berhasil menambahkan loket');
+        return back()->with('success', 'Berhasil menambahkan loket');
     }
 
     /**
@@ -74,9 +73,15 @@ class LoketController extends Controller
     public function edit(Loket $loket)
     {
         //
-        $unit = Unit::all();
-        $data =['unit'=>$unit,'loket'=>$loket,'title'=>'Update Loket'];
-        return view('pages.loket.edit',$data);
+        $loket->load(['unit']);
+        $queue_types = QueueType::where('unit_id', $loket->unit->id)->get()->all();
+        $data = [
+            'unit' => $loket->unit, 
+            'loket' => $loket, 
+            'title' => 'Update Loket',
+            'queue_types'=>$queue_types,
+        ];
+        return view('pages.loket.edit', $data);
     }
 
     /**
@@ -90,14 +95,13 @@ class LoketController extends Controller
     {
         //
         $validate = $request->validate([
-            'unit_id'=>'required',
-            'loket_name'=>'required'
+            'queue_type_id' => 'required',
+            'loket_name' => 'required'
         ]);
 
-        Loket::where('id',$loket->id)
-        ->update($validate);
+        $loket->update($validate);
 
-        return redirect(route('loket.index'))->with('success','data berhasil di update');
+        return redirect(route('loket.index'))->with('success', 'data berhasil di update');
     }
 
     /**
@@ -115,9 +119,9 @@ class LoketController extends Controller
     public function data()
     {
         # code...
-        $loket = Loket::with(['unit'=>function($q){
-            $q->select('id',"unit_name");
-        },'queueType'])->get()->all();
+        $loket = Loket::with(['unit' => function ($q) {
+            $q->select('id', "unit_name");
+        }, 'queueType'])->get()->all();
         return DataTables::of($loket)->addColumn('action', function (Loket $loket) {
             return '<a href="' . route('loket.edit', $loket->id) . '" class="btn btn-warning"><i class="bi bi-pencil-square"></i></a>';
         })->make();

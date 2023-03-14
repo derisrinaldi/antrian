@@ -15,7 +15,7 @@
                             <label for="">Unit</label>
                             <select name="unit_id" id=""
                                 class="form-select @error('unit_id') is-invalid @enderror" disabled>
-                                    <option value="{{ $queueType->unit[0]->id }}" >{{ $queueType->unit[0]->unit_name }}</option>
+                                    <option value="{{ $queueType->unit->id }}" >{{ $queueType->unit->unit_name }}</option>
                             </select>
                             @error('unit_id')
                                 <div class="invalid-feedback">

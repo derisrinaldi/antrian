@@ -22,9 +22,12 @@ class NotifAntrian implements ShouldBroadcastNow
      *
      * @return void
      */
-    public function __construct()
+
+    public $unit_id;
+    public function __construct($unit_id)
     {
         //
+        $this->unit_id = $unit_id;
     }
 
     /**
@@ -34,10 +37,10 @@ class NotifAntrian implements ShouldBroadcastNow
      */
     public function broadcastOn()
     {
-        return new Channel('notif-antrian');
+        return new Channel('notif-antrian-'.$this->unit_id);
     }
 
-     /**
+    /**
      * The event's broadcast name.
      *
      * @return string
@@ -54,23 +57,24 @@ class NotifAntrian implements ShouldBroadcastNow
      */
     public function broadcastWith()
     {
-        $antrian = Antrian::select('id','unit_id',DB::raw('count(loket_id) as jml_antrian'))
-        ->with(['unit'])
-        ->where('loket_id','0')
-        ->where('created_at','like',date('Y-m-d')."%")
-        ->groupBy('unit_id')
-        ->get()
-        ->all();
-        $notif="";
-        foreach ($antrian as $a){
-            $notif .='<div class="col-sm-auto"><button type="button" class="btn btn-primary position-relative">
-            '.$a->unit->unit_name.'
+        $antrian = Antrian::select('id', 'queue_type_id', DB::raw('count(loket_id) as jml_antrian'))
+            ->with(['queueType'])
+            ->where('loket_id', '0')
+            ->where('unit_id',$this->unit_id)
+            ->where('created_at', 'like', date('Y-m-d') . "%")
+            ->groupBy('queue_type_id')
+            ->get()
+            ->all();
+        $notif = "";
+        foreach ($antrian as $a) {
+            $notif .= '<div class="col-sm-auto"><button type="button" class="btn btn-primary position-relative">
+            ' . $a->queueType->name . '
             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-              '.$a->jml_antrian.'
+              ' . $a->jml_antrian . '
               <span class="visually-hidden">unread messages</span>
             </span>
           </button></div>';
         }
-        return ['notif'=>$notif];
+        return ['notif' => $notif];
     }
 }

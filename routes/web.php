@@ -37,7 +37,7 @@ Route::get('/data', function () {
 
 Route::get('/console/{id}/{id2}/{id3}', [AntrianController::class, 'index'])->name('antrian.console');
 
-Route::get("/antrian/{unit}", [AntrianController::class, "getAntrian"]);
+Route::get("/antrian/{queue_type}", [AntrianController::class, "getAntrian"]);
 
 Route::resource('/loket', LoketController::class);
 Route::get('/data/loket', [LoketController::class, "data"])->name('loket.data');

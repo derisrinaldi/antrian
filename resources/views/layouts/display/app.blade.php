@@ -77,7 +77,7 @@
                                 <hr style="border-color: #1ABC9C;">
                                 <div class="text-uppercase" style="font-size: 30px; margin-top: 0px; line-height: 0.8;">
                                     antrian
-                                    <span id="unit">{{ is_array($unit) ? '' : $unit->unit_name }}</span>
+                                    <span id="unit">{{ is_array($queue_type) ? '' : $queue_type->name }}</span>
                                 </div>
                             </div>
                         </div>
@@ -119,12 +119,12 @@
                 console.log(data)
                 $('#antrian').html(data.antrian);
                 $('#loket').html(data.loket);
-                $('#unit').html(data.unit)
+                $('#unit').html(data.queue_type)
                 var sound = new Howl({
                     src: ['{{ asset('audio/airport.mp3') }}'],
                     volume: 0.7,
                     onend: function() {
-                        responsiveVoice.speak("Antrian, " + data.antrian + ", " + data.unit + ", ke, " +
+                        responsiveVoice.speak("Antrian, " + data.antrian + ", " + data.queue_type + ", ke, " +
                             data.loket,
                             "Indonesian Male", {
                                 pitch: 1,

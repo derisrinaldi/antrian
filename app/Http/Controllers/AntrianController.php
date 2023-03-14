@@ -6,6 +6,7 @@ use App\Events\NotifAntrian;
 use App\Events\SendMessage;
 use App\Models\Antrian;
 use App\Models\Loket;
+use App\Models\QueueType;
 use App\Models\Unit;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -26,19 +27,19 @@ class AntrianController extends Controller
         $id2 = Crypt::decrypt($id2);
         $id3 = Crypt::decrypt($id3);
         if ($id2 != "nothing") {
-            $unit2 = Unit::find($id2);
-            $data['unit2'] = $unit2;
-            $data['unit_id2'] = Crypt::encrypt($unit2->id);
+            $queue_type2 = QueueType::find($id2);
+            $data['queue_type2'] = $queue_type2;
+            $data['queue_type_id2'] = Crypt::encrypt($queue_type2->id);
         }
         if ($id3 != "nothing") {
-            $unit3 = Unit::find($id3);
-            $data['unit3'] = $unit3;
-            $data['unit_id3'] = Crypt::encrypt($unit3->id);
+            $queue_type3 = QueueType::find($id3);
+            $data['queue_type3'] = $queue_type3;
+            $data['queue_type_id3'] = Crypt::encrypt($queue_type3->id);
         }
-        $unit = Unit::find($id);
+        $queue_type = QueueType::find($id);
 
-        $data['unit'] = $unit;
-        $data['unit_id'] = Crypt::encrypt($unit->id);
+        $data['queue_type'] = $queue_type;
+        $data['queue_type_id'] = Crypt::encrypt($queue_type->id);
         return view('pages.antrianadmisi.index', $data);
     }
 
@@ -108,38 +109,38 @@ class AntrianController extends Controller
         //
     }
 
-    public function getAntrian($unit)
+    public function getAntrian($queue_type)
     {
         # code...
-        $id = Crypt::decrypt($unit);
-        $unit = Unit::find($id);
-        $query = Antrian::where('unit_id', $unit->id)
+        $id = Crypt::decrypt($queue_type);
+        $queue_type = QueueType::find($id);
+        $query = Antrian::where('queue_type_id', $queue_type->id)
             ->where('created_at', 'like', date('Y-m-d') . "%")
             ->orderBy('antrian', 'desc')
             ->limit(1);
 
-        $antrian = $query->with(['unit' => function ($q) {
-            $q->select('id', 'unit_name');
+        $antrian = $query->with(['queueType' => function ($q) {
+            $q->select('id', 'name');
         }])->get()->all();
         $count =  count($antrian);
         if ($count == 0) {
-            Antrian::create(['antrian' => 1, "unit_id" => $unit->id,'queue_date'=>Carbon::now()->toDateString()]);
+            Antrian::create(['antrian' => 1,"unit_id"=>$queue_type->unit_id, "queue_type_id" => $queue_type->id,'queue_date'=>Carbon::now()->toDateString()]);
         } else {
             $num = $antrian[0]->antrian + 1;
-            Antrian::create(['antrian' => $num, "unit_id" => $unit->id,'queue_date'=>Carbon::now()->toDateString()]);
+            Antrian::create(['antrian' => $num,"unit_id"=>$queue_type->unit_id, "queue_type_id" => $queue_type->id,'queue_date'=>Carbon::now()->toDateString()]);
         }
 
-        $antrian = $query->with(['unit' => function ($q) {
-            $q->select('id', 'unit_name');
+        $antrian = $query->with(['queueType' => function ($q) {
+            $q->select('id', 'name');
         }])->get()->all();
-        $rest = Antrian::select("loket_id")->where('unit_id', $unit->id)
+        $rest = Antrian::select("loket_id")->where('queue_type_id', $queue_type->id)
             ->where('created_at', 'like', date('Y-m-d') . "%")
             ->where('loket_id', "0")->get()->all();
-        event(new NotifAntrian());
+        event(new NotifAntrian($queue_type->unit_id));
         return response()->json([
             "antrian" => $antrian[0]->antrian,
             "date" => date('d/m/Y H:i:s', strtotime($antrian[0]->created_at)),
-            "unit" => $antrian[0]->unit->unit_name,
+            "queue_type" => $antrian[0]->queueType->name,
             "rest" => count($rest)
         ]);
     }
@@ -155,14 +156,14 @@ class AntrianController extends Controller
         $data = ['status' => false];
 
         $q_antrian  = Antrian::where('loket_id', '0')
-            ->where('unit_id', $request->u)
+            ->where('queue_type_id', $request->u)
             ->where('status', $request->a)
             ->where('created_at', 'like', date('Y-m-d') . "%")
             ->orderBy('antrian', 'asc');
 
-        $q_res_antrian = Antrian::with(['unit'])
+        $q_res_antrian = Antrian::with(['unit','queueType'])
             ->where('loket_id', $request->l)
-            ->where('unit_id', $request->u)
+            ->where('queue_type_id', $request->u)
             ->where('status', '1')
             ->where('created_at', 'like', date('Y-m-d') . "%");
 
@@ -180,11 +181,11 @@ class AntrianController extends Controller
                 $_queue = $q_res_antrian->get()->first();
             }
             $loket = Loket::with(['unit'])->find($request->l);
-            $channel_all = "all-loket";
-            $channel_loket = str_replace(' ', '_', $loket->loket_name);
-            event(new NotifAntrian());
-            event(new SendMessage($channel_all, $loket->id, $_queue->unit_id, $_queue->antrian));
-            event(new SendMessage($channel_loket, $loket->id, $_queue->unit_id, $_queue->antrian));
+            $channel_all = "all-loket-".$loket->unit->id;
+            $channel_loket = $loket->id.str_replace(' ', '_', $loket->loket_name);
+            event(new NotifAntrian($loket->unit->id));
+            event(new SendMessage($channel_all, $loket->id, $_queue->queue_type_id, $_queue->antrian));
+            event(new SendMessage($channel_loket, $loket->id, $_queue->queue_type_id, $_queue->antrian));
             $data['status'] = true;
             $data['queue'] = $_queue;
         }
@@ -208,11 +209,11 @@ class AntrianController extends Controller
         ]);
         $antrian = Antrian::find($request->a_id);
         $loket = Loket::with(['unit'])->find($antrian->loket_id);
-        $channel_all = "all-loket";
-        $channel_loket = str_replace(' ', '_', $loket->loket_name);
+        $channel_all = "all-loket-".$antrian->unit_id;
+        $channel_loket = $antrian->loket_id.str_replace(' ', '_', $loket->loket_name);
 
-        event(new SendMessage($channel_all, $loket->id, $antrian->unit_id, $antrian->antrian));
-        event(new SendMessage($channel_loket, $loket->id, $antrian->unit_id, $antrian->antrian));
+        event(new SendMessage($channel_all, $loket->id, $antrian->queue_type_id, $antrian->antrian));
+        event(new SendMessage($channel_loket, $loket->id, $antrian->queue_type_id, $antrian->antrian));
     }
 
     public function updateStatus(Request $request)

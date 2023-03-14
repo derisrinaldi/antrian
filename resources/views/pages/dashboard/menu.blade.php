@@ -46,24 +46,27 @@
                         <h5 class="card-title text-uppercase">console box</h5>
                         <div class="form-group visually-hidden" id="form1">
                             <select name="" id="console" class="form-select mb-2">
-                                @foreach ($unit as $u)
-                                    <option value="{{ Crypt::encrypt($u->id) }}">{{ $u->unit_name }}</option>
+                                @foreach ($queue_types as $queue_type)
+                                    <option value="{{ Crypt::encrypt($queue_type->id) }}">
+                                        {{ $queue_type->unit->unit_name . ' - ' . $queue_type->name }}</option>
                                 @endforeach
                             </select>
 
                             <label for="" class="mb-1">Pilih Console ke 2 jika perlu</label>
                             <select name="" id="console2" class="form-select mb-2">
                                 <option value="{{ Crypt::encrypt('nothing') }}">--Pilih Console ke 2--</option>
-                                @foreach ($unit as $u)
-                                    <option value="{{ Crypt::encrypt($u->id) }}">{{ $u->unit_name }}</option>
+                                @foreach ($queue_types as $queue_type)
+                                    <option value="{{ Crypt::encrypt($queue_type->id) }}">
+                                        {{ $queue_type->unit->unit_name . ' - ' . $queue_type->name }}</option>
                                 @endforeach
                             </select>
 
                             <label for="" class="mb-1">Pilih Console ke 3 jika perlu</label>
                             <select name="" id="console3" class="form-select mb-2">
                                 <option value="{{ Crypt::encrypt('nothing') }}">--Pilih Console ke 3--</option>
-                                @foreach ($unit as $u)
-                                    <option value="{{ Crypt::encrypt($u->id) }}">{{ $u->unit_name }}</option>
+                                @foreach ($queue_types as $queue_type)
+                                    <option value="{{ Crypt::encrypt($queue_type->id) }}">
+                                        {{ $queue_type->unit->unit_name . ' - ' . $queue_type->name }}</option>
                                 @endforeach
                             </select>
                             <button class="btn btn-danger" onclick="openConsole('console')">Open</button>
@@ -76,10 +79,14 @@
                     <div class="card-body text-center">
                         <h5 class="card-title text-uppercase">Petugas Panggil</h5>
                         <div class="form-group  visually-hidden" id="form2">
-                            <select name="" id="caller" class="form-select mb-2">
-                                @foreach ($loket as $l)
-                                    <option value="{{ $l->id }}">{{ $l->loket_name }} ({{ $l->unit->unit_name }})</option>
+                            <select name="" id="queue_type_caller" class="form-select mb-2"
+                                onchange="getLoket(this.id,'caller')">
+                                @foreach ($unit as $u)
+                                    <option value="{{ $u->id }}">{{ $u->unit_name }}</option>
                                 @endforeach
+                            </select>
+                            <select name="" id="caller" class="form-select mb-2">
+
                             </select>
                             <button class="btn btn-danger" onclick="openCaller()">Open</button>
                         </div>
@@ -91,11 +98,14 @@
                     <div class="card-body text-center">
                         <h5 class="card-title text-uppercase">Display</h5>
                         <div class="form-group  visually-hidden" id="form3">
-                            <select name="" id="display" class="form-select mb-2">
-                                <option value="all">Semua Loket</option>
-                                @foreach ($loket as $l)
-                                    <option value="{{ $l->id }}">{{ $l->loket_name }} ({{ $l->unit->unit_name }})</option>
+                            <select name="" id="unit_display" class="form-select mb-2"
+                                onchange="getLoketDisplay(this.id,'display')">
+                                @foreach ($unit as $u)
+                                    <option value="{{ $u->id }}">{{ $u->unit_name }}</option>
                                 @endforeach
+                            </select>
+                            <select name="" id="display" class="form-select mb-2">
+                                
                             </select>
                             <button class="btn btn-danger" onclick="openDisplay()">Open</button>
                         </div>
@@ -119,8 +129,8 @@
     <script src="{{ asset('js/app.js') }}"></script>
     <script>
         $(() => {
-            $('#caller').trigger('change')
-            $('#display').trigger('change')
+            $('#queue_type_caller').trigger('change')
+            $('#unit_display').trigger('change')
         })
         var DataLoket = {
             @foreach ($unit as $u)
@@ -130,7 +140,7 @@
                             @foreach ($u->loket as $l)
                                 {
                                     id: '{{ $l->id }}',
-                                    value: '{{ $l->loket_name }}',
+                                    value: '{{ $l->loket_name . ' - ' . $l->queueType->name }}',
                                 },
                             @endforeach
                         ]
@@ -146,10 +156,10 @@
         }
 
         function openConsole(id) {
-            var unit = $('#' + id).val();
-            var unit2 = $('#console2').val();
-            var unit3 = $('#console3').val();
-            window.open('/console/' + unit + '/' + unit2+ '/' + unit3, '_blank')
+            var queue_type = $('#' + id).val();
+            var queue_type2 = $('#console2').val();
+            var queue_type3 = $('#console3').val();
+            window.open('/console/' + queue_type + '/' + queue_type2 + '/' + queue_type3, '_blank')
         }
 
         function openCaller() {
@@ -166,8 +176,12 @@
             var unit = $("#" + id).val();
             var d_loket = DataLoket[unit].loket;
             var text = "";
-            for (var i = 0; i < d_loket.length; i++) {
-                text += '<option value="' + d_loket[i].id + '">' + d_loket[i].value + '</option>'
+            if (d_loket.length != 0) {
+                for (var i = 0; i < d_loket.length; i++) {
+                    text += '<option value="' + d_loket[i].id + '">' + d_loket[i].value + '</option>'
+                }
+            }else{
+                text +="<option></option>";
             }
             $('#' + dest).html(text);
         }
@@ -175,7 +189,7 @@
         function getLoketDisplay(id, dest) {
             var unit = $("#" + id).val();
             var d_loket = DataLoket[unit].loket;
-            var text = '<option value="all">Semua Loket</option>';
+            var text = '<option value="all-'+unit+'">Semua Loket</option>';
             for (var i = 0; i < d_loket.length; i++) {
                 text += '<option value="' + d_loket[i].id + '">' + d_loket[i].value + '</option>'
             }

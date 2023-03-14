@@ -23,34 +23,39 @@ class DisplayController extends Controller
         # code...
 
         # query antrian sedang dilayani
-        $current_antrian = Antrian::where('loket_id', '<>', '0')
+        $current_antrian = Antrian::with(['queueType'])->where('loket_id', '<>', '0')
             ->where('created_at', 'like', date('Y-m-d') . "%")
             ->where('status', '1');
 
-
+        $display = explode('-',$loket_id);
         $loket = null;
         $unit = null;
+        $queue_type=[];
         $data = [];
 
-        if ($loket_id != "all") {
-            $loket = Loket::with(['unit'])->find($loket_id);
+        if ($display[0] != "all") {
+            $loket = Loket::with(['unit','queueType'])->find($loket_id[0]);
             $unit = $loket->unit;
-            $channel = str_replace(' ', '_', $loket->loket_name);
+            $queue_type = $loket->queueType;
+            $channel = $loket->id.str_replace(' ', '_', $loket->loket_name);
         } else {
             $now = $current_antrian->latest('updated_at')->get()->first();
             $loket =  [];
             $unit = [];
+            $queue_type=[];
             if (!is_null($now)) {
                 $loket = $now->loket;
                 $unit = $now->unit;
+                $queue_type = $now->queueType;
                 $data['antrian']=$now->antrian;
             }
 
-            $channel = "all-loket";
+            $channel = "all-loket-".$display[1];
         }
 
         $data['loket'] = $loket;
         $data['unit'] = $unit;
+        $data['queue_type'] = $queue_type;
         $data['channel'] = $channel;
 
         return view('layouts.display.app', $data);

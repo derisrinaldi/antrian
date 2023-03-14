@@ -3,6 +3,7 @@
 namespace App\Events;
 
 use App\Models\Loket;
+use App\Models\QueueType;
 use App\Models\Unit;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -17,7 +18,7 @@ class SendMessage implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
     private Loket $loket;
-    private Unit $unit;
+    private QueueType $queue_type;
     private $antrian,$channel;
 
     /**
@@ -25,11 +26,11 @@ class SendMessage implements ShouldBroadcastNow
      *
      * @return void
      */
-    public function __construct($channel,$loket,$unit,$antrian)
+    public function __construct($channel,$loket,$queue_type,$antrian)
     {
         //
         $this->loket = Loket::find($loket);
-        $this->unit = Unit::find($unit);
+        $this->queue_type = QueueType::find($queue_type);
         $this->antrian = $antrian;
         $this->channel = $channel;
     }
@@ -61,6 +62,6 @@ class SendMessage implements ShouldBroadcastNow
      */
     public function broadcastWith()
     {
-        return ['antrian'=>$this->antrian,'loket'=>$this->loket->loket_name,'unit'=>$this->unit->unit_name];
+        return ['antrian'=>$this->antrian,'loket'=>$this->loket->loket_name,'queue_type'=>$this->queue_type->name];
     }
 }

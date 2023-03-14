@@ -14,6 +14,6 @@ class QueueType extends Model
     public function unit()
     {
         # code...
-        return $this->hasMany(Unit::class,'id','unit_id');
+        return $this->belongsTo(Unit::class,'unit_id','id');
     }
 }

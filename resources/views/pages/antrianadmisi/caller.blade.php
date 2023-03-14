@@ -11,7 +11,7 @@
             <div class="card">
                 <div class="card-header">
                     <div class="text-center fw-bold fs-4 text-uppercase text-light">
-                        nomor antrean {{ $loket->unit->unit_name }} sedang berjalan
+                        nomor antrean {{ $loket->queueType->name }} sedang berjalan
                     </div>
                 </div>
                 <div class="card-body">
@@ -20,7 +20,7 @@
                             <div class="fw-bold" id="antrian" style="font-size:120px">
                                 {{ $antrian != null ? $antrian->antrian : '0' }}</div>
                             <div class="fw-bold" id="antrian_unit" style="font-size:50px">
-                                {{ $antrian != null ? $antrian->unit->unit_name : $loket->unit->unit_name }}
+                                {{ $antrian != null ? $antrian->queueType->name : $loket->queueType->name }}
                             </div>
                         </div>
                     </div>
@@ -31,7 +31,7 @@
                     <div class="row" id="notif">
                         @foreach ($notif as $n)
                             <div class="col-sm-auto"><button type="button" class="btn btn-primary position-relative">
-                                    {{ $n->unit->unit_name }}
+                                    {{ $n->queueType->name }}
                                     <span
                                         class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                                         {{ $n->jml_antrian }}
@@ -57,12 +57,12 @@
                     </div>
                     <hr>
                     <div class="row">
-                        <label for="" class="col-sm-3">Unit</label>
+                        <label for="" class="col-sm-3">Jenis Antrian</label>
                         <div class="col-sm-9">
-                            <select name="unit_id" id="unit_id" class="form-select">
-                                @foreach ($unit as $u)
-                                    <option value="{{ $u->id }}" @if ($u->id == $loket->unit_id) selected @endif>
-                                        {{ $u->unit_name }}</option>
+                            <select name="queue_type_id" id="queue_type_id" class="form-select">
+                                @foreach ($queue_types as $queue_type)
+                                    <option value="{{ $queue_type->id }}" @if ($queue_type->id == $loket->queue_type_id) selected @endif>
+                                        {{ $queue_type->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -147,7 +147,7 @@
 
             function nextQueue() {
                 var a = $("input[name='antrean']").val();
-                var u = $('#unit_id').val();
+                var u = $('#queue_type_id').val();
                 console.log(u);
                 var data = "l={{ $loket->id }}&a=" + a + "&u=" + u;
                 $.ajax({
@@ -163,7 +163,7 @@
                         if (data.status == true) {
                             $("#antrian").html(data.queue.antrian);
                             antrian_id = data.queue.id;
-                            $('#antrian_unit').html(data.queue.unit.unit_name)
+                            $('#antrian_unit').html(data.queue.queue_type.name)
                             $('#next').addClass('visually-hidden');
                             $('#ulang').removeClass('visually-hidden')
                             $('#status-group').removeClass('visually-hidden')
@@ -242,7 +242,7 @@
             }
 
             $(() => {
-                window.Echo.channel('notif-antrian')
+                window.Echo.channel('notif-antrian-{{ $loket->unit->id }}')
                     .listen('.UserEvent', (data) => {
                         console.log(data)
                         $('#notif').html(data.notif);

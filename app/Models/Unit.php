@@ -24,4 +24,8 @@ class Unit extends Model
         # code...
         return $this->hasMany(Loket::class);
     }
+
+    public function queueType(){
+        return $this->hasMany(QueueType::class);
+    }
 }

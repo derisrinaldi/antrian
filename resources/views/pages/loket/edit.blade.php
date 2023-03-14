@@ -5,13 +5,14 @@
         <div class="col-lg-8">
             <div class="card">
                 <div class="card-body">
-                    <form action="{{ route('loket.update',$loket->id) }}" method="post">
+                    <form action="{{ route('loket.update', $loket->id) }}" method="post">
                         @method('put')
                         @csrf
                         <div class="form-group mb-2">
                             <label for="">Nama Loket</label>
                             <input type="text" name="loket_name"
-                                class="form-control @error('loket_name') is-invalid @enderror" value="{{ old('loket_name',$loket->loket_name) }}">
+                                class="form-control @error('loket_name') is-invalid @enderror"
+                                value="{{ old('loket_name', $loket->loket_name) }}">
                             @error('loket_name')
                                 <div class="invalid-feedback">
                                     {{ $message }}
@@ -21,12 +22,25 @@
                         <div class="form-group mb-2">
                             <label for="">Default Unit</label>
                             <select name="unit_id" id=""
-                                class="form-select @error('unit_id') is-invalid @enderror">
-                                @foreach ($unit as $u)
-                                    <option value="{{ $u->id }}" @if($u->id == $loket->unit_id) selected @endif>{{ $u->unit_name }}</option>
-                                @endforeach
+                                class="form-select @error('unit_id') is-invalid @enderror" disabled>
+                                <option value="{{ $unit->id }}">{{ $unit->unit_name }}</option>
                             </select>
                             @error('unit_id')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+
+                        <div class="form-group mb-2">
+                            <label for="">Default Jenis Antrian</label>
+                            <select name="queue_type_id" id="jenis-antrian"
+                                class="form-select @error('queue_type_id') is-invalid @enderror">
+                                @foreach ($queue_types as $queue_type)
+                                    <option value="{{ $queue_type->id }}">{{ $queue_type->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('queue_type_id')
                                 <div class="invalid-feedback">
                                     {{ $message }}
                                 </div>

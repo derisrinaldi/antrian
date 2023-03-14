@@ -23,4 +23,10 @@ class Antrian extends Model
         # code...
         return $this->belongsTo(Loket::class);
     }
+
+    public function queueType()
+    {
+        # code...
+        return $this->belongsTo(QueueType::class);
+    }
 }
