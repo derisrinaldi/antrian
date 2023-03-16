@@ -13,19 +13,19 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link {{ Route::is('unit*') ? 'active':'' }}" href="{{ route('unit.index') }}">
-                    <i class="bi bi-hdd-rack-fill"></i>
+                    <i class="bi bi-bank2"></i>
                     unit
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link {{ Route::is('jenis-antrian*') ? 'active':'' }}" href="{{ route('jenis-antrian.index') }}">
-                    <i class="bi bi-hdd-rack-fill"></i>
+                    <i class="bi bi-clipboard2-check-fill"></i>
                     Jenis Antrian
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link {{ Route::is('loket*') ? 'active':'' }}" href="{{ route('loket.index') }}">
-                    <i class="bi bi-hdd-rack-fill"></i>
+                    <i class="bi bi-pc-display-horizontal"></i>
                     Loket
                 </a>
             </li>

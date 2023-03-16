@@ -54,7 +54,7 @@
             },
             columns: [
                 {
-                    data: 'unit.unit_name',
+                    data: 'queue_type.name',
                     name: 'unit_id'
                 },
                 {

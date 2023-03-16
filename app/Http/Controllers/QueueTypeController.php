@@ -110,7 +110,7 @@ class QueueTypeController extends Controller
     public function getDatatableJson()
     {
         # code...
-        $queue_types = QueueType::get();
+        $queue_types = QueueType::with(['unit'])->orderBy('unit_id','asc')->get();
         return DataTables::of($queue_types)->addColumn('action', function ($queue_type) {
             return '<a href="' . route('jenis-antrian.edit', $queue_type->id) . '" class="btn btn-warning"><i class="bi bi-pencil-square"></i></a>';
         })->make();

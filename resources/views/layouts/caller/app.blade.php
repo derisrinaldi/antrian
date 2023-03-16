@@ -51,7 +51,7 @@
     @stack('style')
 </head>
 
-<body>
+<body  class="d-flex flex-column min-vh-100">
 
     <nav class="navbar navbar-expand-md navbar-light fixed-top bg-light"
         style="z-index: 1025;box-shadow: 0px 0px 1px 0px #8a8a8a">

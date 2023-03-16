@@ -230,7 +230,7 @@ class AntrianController extends Controller
     public function data(Request $request)
     {
         # code...
-        $antrian = Antrian::with(['unit', 'loket'])
+        $antrian = Antrian::with(['unit', 'loket','queueType'])
             ->where('created_at', 'like', $request->tanggal . "%")
             ->get()->all();
         $data = DataTables::of($antrian)
