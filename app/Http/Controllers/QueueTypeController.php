@@ -72,7 +72,6 @@ class QueueTypeController extends Controller
     public function edit(QueueType $queueType)
     {
         //
-        $queueType->load('unit');
         return view('pages.queue_types.edit',['queueType'=>$queueType]);
     }
 

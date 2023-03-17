@@ -73,13 +73,11 @@ class LoketController extends Controller
     public function edit(Loket $loket)
     {
         //
-        $loket->load(['unit']);
-        $queue_types = QueueType::where('unit_id', $loket->unit->id)->get()->all();
         $data = [
             'unit' => $loket->unit, 
             'loket' => $loket, 
             'title' => 'Update Loket',
-            'queue_types'=>$queue_types,
+            'queue_types'=>$loket->unit->queueType->all(),
         ];
         return view('pages.loket.edit', $data);
     }
