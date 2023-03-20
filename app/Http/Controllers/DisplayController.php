@@ -39,7 +39,7 @@ class DisplayController extends Controller
             $queue_type = $loket->queueType;
             $channel = $loket->id.str_replace(' ', '_', $loket->loket_name);
         } else {
-            $now = $current_antrian->latest('updated_at')->get()->first();
+            $now = $current_antrian->where('unit_id',$display[1])->latest('updated_at')->get()->first();
             $loket =  [];
             $unit = [];
             $queue_type=[];
