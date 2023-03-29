@@ -1,5 +1,5 @@
 <center>
-    <h4>RS PERMATA KUNIGAN</h4>
+    <h4>{{ env('APP_NAME') }}</h4>
     <p style="font-size: 12px">20/22/2022 1919191</p>
  <span style="display: inline-block;
  width: 20%;
